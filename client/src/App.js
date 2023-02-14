@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <div>
-      <MapContainer center={[44.119370, 15.231365]} zoom={13} scrollWheelZoom={true}>
+      <MapContainer center={[44.119370, 15.231365]} zoom={12} scrollWheelZoom={true}>
         <Maps />
         <Markers />
         <Button />

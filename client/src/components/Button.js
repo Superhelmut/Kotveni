@@ -1,31 +1,40 @@
-import React, { useRef, useState, useCallback, useMemo, MapEvents } from 'react';
+/*
+Tento kód přidá tlačítko na mapu, po stisknutí tlačítka se na mapě objeví nový marker.
+Po kliknutí na tlačítko se zobrazí popup, do kterého lze zadat údaje, které se odešlou do databáze. Automaticky
+se odešle i pozice markeru. Marker se dá posouvat
+*/
+
+import React, { useRef, useState, useCallback, useMemo, } from 'react';
 import "./Button.css"
 import Axios from "axios"
 import { Marker, useMap, Popup } from 'react-leaflet'
 
 function Button() {
-	const [showInfo, setShowInfo] = useState(false);
+	const [showInfo, setShowInfo] = useState(false); //nastavení zobrazení makeru
 
 	const CustomControl = ({ position }) => {
 		const buttonRef = useRef(null);
-		const map = useMap()
 
 		const AddMarker = () => {
+			const map = useMap()
 			const latlng = map.getCenter(); // získání souřadnic středu mapy
 			const [name, setName] = useState("");
 			const [draggable, setDraggable] = useState(false)
 			const [position, setPosition] = useState(latlng)
 			const markerRef = useRef(null)
 
-			const addInfo = () => {
+
+			const addInfo = () => { //spojení se serverem -> přidání záznamu
 				const latitude = position.lat
 				const longitude = position.lng
 				Axios.post("http://localhost:3001/create", {
-					name: name, latitude, longitude,
+					name: name, 
+					latitude: latitude,
+					longitude: longitude,
 				}).then(() => console.log("úspěch"))
 			}
 
-			const eventHandlers = useMemo(
+			const eventHandlers = useMemo( //zjišťování pozice markeru při přesouvání
 				() => ({
 					dragend() {
 						const marker = markerRef.current
@@ -36,11 +45,11 @@ function Button() {
 				}),
 				[],
 			)
-			const toggleDraggable = useCallback(() => {
+			const toggleDraggable = useCallback(() => { //zjišťování, zda bylo z markerem hnuto
 				setDraggable((d) => !d)
 			}, [])
 
-			return <Marker
+			return <Marker //přidání markeru
 				position={position}
 				draggable={draggable}
 				eventHandlers={eventHandlers}
@@ -48,8 +57,8 @@ function Button() {
 				<Popup minWidth={90}>
 					<span onClick={toggleDraggable}>
 						{draggable
-							? 'Marker is draggable'
-							: 'Click here to make marker draggable'}
+							? <button>Ukončit posouvání bodu</button>
+							: <button>Posunout bod</button>}
 					</span>
 					<p></p>
 					<label>Název</label>
@@ -61,7 +70,7 @@ function Button() {
 			</Marker>
 		}
 
-		return (
+		return ( //nastavení tlačítka tak, aby bylo vidět
 			<div
 				ref={buttonRef}
 				style={{
@@ -71,8 +80,8 @@ function Button() {
 					zIndex: 1000
 				}}
 			>
-				<button onClick={() => setShowInfo(!showInfo)}>Tlačítko</button>
-				{showInfo && AddMarker()}
+				<button onClick={() => setShowInfo(!showInfo)}>Tlačítko</button> 
+				{showInfo && AddMarker()} 
 			</div>
 		);
 	};

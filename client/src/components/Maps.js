@@ -1,3 +1,7 @@
+/*
+Tent kód inicializuje mapu
+*/
+
 import "./Maps.css"
 import { TileLayer } from 'react-leaflet'
 

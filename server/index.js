@@ -6,7 +6,7 @@ const cors = require("cors")
 app.use(cors())
 app.use(express.json())
 
-const db = mysql.createConnection({
+const db = mysql.createConnection({ //vytvoření databázového spojení
 	user: 'root',
 	host: 'localhost',
 	password: '',
@@ -14,7 +14,7 @@ const db = mysql.createConnection({
 
 });
 
-app.post('/create', (reg, res) => {
+app.post('/create', (reg, res) => { //přidání záznamu
 	const name = reg.body.name
 	const latitude = reg.body.latitude
 	const longitude = reg.body.longitude
@@ -35,7 +35,7 @@ app.post('/create', (reg, res) => {
 
 })
 
-app.get('/kot', (reg, res) => {
+app.get('/kot', (reg, res) => { //čtení záznamu
 	db.query('SELECT * FROM kotva',
 		(err, result) => {
 			if (err) {
@@ -48,6 +48,32 @@ app.get('/kot', (reg, res) => {
 		}
 	)
 })
+
+app.put('/update', (reg, res) => {
+	const id = reg.body.id
+	const name = reg.body.name
+	const latitude = reg.body.latitude
+	const longitude = reg.body.longitude
+	db.query('UPDATE kotva SET name = ? WHERE id = ?', [name, id], (err, result) => {
+		if (err) {
+			console.log(err)
+		}
+		else {
+			res.send(result)
+		}
+	})
+})
+
+app.delete("/delete/:id", (req, res) => {
+	const id = req.params.id;
+	db.query("DELETE FROM kotva WHERE id = ?", id, (err, result) => {
+	  if (err) {
+		console.log(err);
+	  } else {
+		res.send(result);
+	  }
+	});
+  });
 
 app.listen(3001, () => {
 	console.log("tvůj server běží na portu 3001 ")

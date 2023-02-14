@@ -1,20 +1,30 @@
 import React, { useRef, useState } from 'react';
 import "./Button.css"
+import Axios from "axios"
+
 function Button() {
 	const [showInfo, setShowInfo] = useState(false);
+	const [name, setName] = useState("");
+
+	const addInfo = () => {
+		Axios.post("http://localhost:3001/create", {
+			name: name,
+		}).then(() => console.log("úspěch"))
+	}
+
+
+	const info = () => {
+		return (
+			<div className='info'>
+				<label>Název</label>
+				<input type="text" onChange={(event) => setName(event.target.value)} />
+				<button onClick={addInfo}>Přidat info</button>
+			</div>
+		)
+	}
 
 	const CustomControl = ({ position }) => {
 		const buttonRef = useRef(null);
-
-		const info = () => {
-			return (
-				<div className='info'>
-					<label>Název</label>
-					<input type="text" />
-
-				</div>
-			)
-		}
 
 		return (
 			<div

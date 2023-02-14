@@ -16,10 +16,12 @@ const db = mysql.createConnection({
 
 app.post('/create', (reg, res) => {
 	const name = reg.body.name
+	const latitude = reg.body.latitude
+	const longitude = reg.body.longitude
 
 	db.query(
-		'INSERT INTO kotva (name) VALUES (?)',
-		[name],
+		'INSERT INTO kotva (name, latitude, longitude) VALUES (?, ?, ?)',
+		[name, latitude, longitude],
 		(err, result) => {
 			if (err) {
 				console.log(err)

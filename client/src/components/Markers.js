@@ -10,6 +10,8 @@ import Axios from "axios"
 function Markers() {
 	const [list, setList] = useState([]);
 	const [name, setName] = useState(0);
+	const [click, setCklick] = useState(0);
+
 
 
 	const getInfo = () => { //vytvoření spojení s databází, ze ktré získáme data
@@ -19,14 +21,16 @@ function Markers() {
 		})
 	}
 
-	const updateMarker = (id) => { //databázové spojení pro aktualizaci dat
-		Axios.put("http://localhost:3001/update", { name: name, id: id }).then((response) => {
+	const updateMarker = (id, latitude, longitude) => { //databázové spojení pro aktualizaci dat
+		Axios.put("http://localhost:3001/update", { name: name, id: id, latitude: latitude, longitude: longitude}).then((response) => {
 			setList(
 				list.map((val) => {
 					return val.id == id
 						? {
 							id: val.id,
 							name: name,
+							latitude: val.latitude,
+							longitude: val.longitude
 						}
 						: val;
 				})
@@ -47,7 +51,12 @@ function Markers() {
 
 	useEffect(() => { //odešle pžadavek na spojení se serverem  a díky tomu se vypíší data do popupu
 		getInfo()
-	}, [] )
+	}, [])
+
+	useEffect(() => { //odešle pžadavek na spojení se serverem  a díky tomu se vypíší data do popupu
+		getInfo()
+	}, [click])
+
 
 	return (
 		<div>
@@ -59,6 +68,8 @@ function Markers() {
 						<input type="text" onChange={(event) => setName(event.target.value)} />
 						<button onClick={() => {
 							updateMarker(val.id)
+							setCklick(click + 1)
+							console.log(click)
 						}
 						}>Aktualizovat</button>
 						<h2>{val.latitude}</h2>

@@ -22,15 +22,23 @@ function Button() {
 			const [draggable, setDraggable] = useState(false)
 			const [position, setPosition] = useState(latlng)
 			const markerRef = useRef(null)
-
+			const [isChecked, setIsChecked] = useState(
+				{
+					checkbox1: false,
+					checkbox2: false,
+				}
+			);
 
 			const addInfo = () => { //spojení se serverem -> přidání záznamu
 				const latitude = position.lat
 				const longitude = position.lng
+				const s = isChecked.checkbox1
+				console.log(s)
 				Axios.post("http://localhost:3001/create", {
-					name: name, 
+					name: name,
 					latitude: latitude,
 					longitude: longitude,
+					s: s,
 				}).then(() => console.log("úspěch"))
 			}
 
@@ -49,6 +57,14 @@ function Button() {
 				setDraggable((d) => !d)
 			}, [])
 
+			const handleCheckboxChange = (event) => { //změna zaškrtnutí/nezaškrtnutí checkboxu
+				const { name, checked } = event.target;
+				setIsChecked(prevState => ({
+					...prevState,
+					[name]: checked
+				}));
+			}
+
 			return <Marker //přidání markeru
 				position={position}
 				draggable={draggable}
@@ -61,8 +77,16 @@ function Button() {
 							: <button>Posunout bod</button>}
 					</span>
 					<p></p>
-					<label>Název</label>
+					<label>Název </label>
 					<input type="text" onChange={(event) => setName(event.target.value)} />
+					<p></p>
+					<label>Směr větru</label>
+					<p></p>
+					<label>S </label>
+					<input type="checkbox" value="S" name='checkbox1' checked={isChecked.checkbox1} onChange={handleCheckboxChange} />
+					<label> SV </label>
+					<input type="checkbox" value="SV" name='checkbox2' checked={isChecked.checkbox2} onChange={handleCheckboxChange} />
+					<p></p>
 					<button onClick={addInfo}>Přidat info</button>
 					<p></p>
 					{console.log(position.lat)}
@@ -80,8 +104,8 @@ function Button() {
 					zIndex: 1000
 				}}
 			>
-				<button onClick={() => setShowInfo(!showInfo)}>Tlačítko</button> 
-				{showInfo && AddMarker()} 
+				<button onClick={() => setShowInfo(!showInfo)}>Tlačítko</button>
+				{showInfo && AddMarker()}
 			</div>
 		);
 	};

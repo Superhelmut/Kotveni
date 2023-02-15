@@ -18,10 +18,12 @@ app.post('/create', (reg, res) => { //přidání záznamu
 	const name = reg.body.name
 	const latitude = reg.body.latitude
 	const longitude = reg.body.longitude
+	const s = reg.body.s
+
 
 	db.query(
-		'INSERT INTO kotva (name, latitude, longitude) VALUES (?, ?, ?)',
-		[name, latitude, longitude],
+		'INSERT INTO kotva (name, latitude, longitude, s) VALUES (?, ?, ?, ?)',
+		[name, latitude, longitude, s],
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -49,7 +51,7 @@ app.get('/kot', (reg, res) => { //čtení záznamu
 	)
 })
 
-app.put('/update', (reg, res) => {
+app.put('/update', (reg, res) => { //aktualizace záznamu
 	const id = reg.body.id
 	const name = reg.body.name
 	const latitude = reg.body.latitude
@@ -64,7 +66,7 @@ app.put('/update', (reg, res) => {
 	})
 })
 
-app.delete("/delete/:id", (req, res) => {
+app.delete("/delete/:id", (req, res) => { //smazání záznamu
 	const id = req.params.id;
 	db.query("DELETE FROM kotva WHERE id = ?", id, (err, result) => {
 	  if (err) {

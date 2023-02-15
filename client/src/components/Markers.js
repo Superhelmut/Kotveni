@@ -19,7 +19,7 @@ function Markers() {
 		})
 	}
 
-	const updateMarker = (id) => {
+	const updateMarker = (id) => { //databázové spojení pro aktualizaci dat
 		Axios.put("http://localhost:3001/update", { name: name, id: id }).then((response) => {
 			setList(
 				list.map((val) => {
@@ -34,7 +34,7 @@ function Markers() {
 		})
 	}
 
-	const deleteMarker = (id) => {
+	const deleteMarker = (id) => { //smazání záznamu z databáze -> spojení s databází
 		Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {
 			setList(
 				list.filter((val) => {
@@ -45,21 +45,20 @@ function Markers() {
 
 	}
 
-	useEffect(() => { //odešle pžadavek na spojení se serverem
+	useEffect(() => { //odešle pžadavek na spojení se serverem  a díky tomu se vypíší data do popupu
 		getInfo()
-	}, [])
+	}, [] )
 
 	return (
 		<div>
 			{list.map((val) => ( // získáme data z databáze, které vypíšeme do marker->popup
+
 				<Marker key={val.id} position={[val.latitude, val.longitude]}>
 					<Popup>
-						<h1>{val.name}</h1>
-						{" "}
+						<h1>{val.name} </h1>
 						<input type="text" onChange={(event) => setName(event.target.value)} />
 						<button onClick={() => {
 							updateMarker(val.id)
-							getInfo()
 						}
 						}>Aktualizovat</button>
 						<h2>{val.latitude}</h2>
@@ -68,7 +67,8 @@ function Markers() {
 						<button onClick={() => deleteMarker(val.id)}>Smazat</button>
 					</Popup>
 				</Marker>
-			))}		</div>
+			))}
+		</div>
 	)
 }
 

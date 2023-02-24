@@ -18,12 +18,12 @@ app.post('/create', (reg, res) => { //přidání záznamu
 	const name = reg.body.name
 	const latitude = reg.body.latitude
 	const longitude = reg.body.longitude
-	const s = reg.body.s
+	const category_id = reg.body.category_id
 
 
 	db.query(
-		'INSERT INTO kotva (name, latitude, longitude, s) VALUES (?, ?, ?, ?)',
-		[name, latitude, longitude, s],
+		'INSERT INTO kotva (name, latitude, longitude, category_id) VALUES (?, ?, ?, ?)',
+		[name, latitude, longitude, category_id],
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -38,7 +38,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 })
 
 app.get('/kot', (reg, res) => { //čtení záznamu
-	db.query('SELECT * FROM kotva',
+	db.query('SELECT kotva.*, category.name AS category_name FROM kotva JOIN category ON kotva.category_id = category.id',
 		(err, result) => {
 			if (err) {
 				console.log(err)

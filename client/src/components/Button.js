@@ -22,23 +22,16 @@ function Button() {
 			const [draggable, setDraggable] = useState(false)
 			const [position, setPosition] = useState(latlng)
 			const markerRef = useRef(null)
-			const [isChecked, setIsChecked] = useState(
-				{
-					checkbox1: false,
-					checkbox2: false,
-				}
-			);
+			const [isChecked, setIsChecked] = useState(""); //nastavuje radiobuttony
 
 			const addInfo = () => { //spojení se serverem -> přidání záznamu
 				const latitude = position.lat
 				const longitude = position.lng
-				const s = isChecked.checkbox1
-				console.log(s)
 				Axios.post("http://localhost:3001/create", {
 					name: name,
 					latitude: latitude,
 					longitude: longitude,
-					s: s,
+					category_id: isChecked,
 				}).then(() => console.log("úspěch"))
 			}
 
@@ -56,14 +49,11 @@ function Button() {
 			const toggleDraggable = useCallback(() => { //zjišťování, zda bylo z markerem hnuto
 				setDraggable((d) => !d)
 			}, [])
-
-			const handleCheckboxChange = (event) => { //změna zaškrtnutí/nezaškrtnutí checkboxu
-				const { name, checked } = event.target;
-				setIsChecked(prevState => ({
-					...prevState,
-					[name]: checked
-				}));
-			}
+			
+			const handleCheckboxChange = (event) => { //zjistí, který radiobutton je zaškrtnutý a odešlš hodnotu do isChecked
+				setIsChecked(event.target.value);
+			  };
+			  
 
 			return <Marker //přidání markeru
 				position={position}
@@ -82,10 +72,15 @@ function Button() {
 					<p></p>
 					<label>Směr větru</label>
 					<p></p>
-					<label>S </label>
-					<input type="checkbox" value="S" name='checkbox1' checked={isChecked.checkbox1} onChange={handleCheckboxChange} />
-					<label> SV </label>
-					<input type="checkbox" value="SV" name='checkbox2' checked={isChecked.checkbox2} onChange={handleCheckboxChange} />
+					<label>Kotvení </label>
+					<input type="radio" value="1" name='radiobutton' checked={isChecked.kotva} onChange={handleCheckboxChange} />
+					<label> Bojka </label>
+					<input type="radio" value="2" name='radiobutton' checked={isChecked.bojka} onChange={handleCheckboxChange} />
+					<label>Městské mole </label>
+					<input type="radio" value="3" name='radiobutton' checked={isChecked.mestkeMolo} onChange={handleCheckboxChange} />
+					<label> Marina </label>
+					<input type="radio" value="4" name='radiobutton' checked={isChecked.marina} onChange={handleCheckboxChange} />
+
 					<p></p>
 					<button onClick={addInfo}>Přidat info</button>
 					<p></p>

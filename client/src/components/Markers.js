@@ -10,7 +10,6 @@ import Axios from "axios"
 function Markers() {
 	const [list, setList] = useState([]);
 	const [name, setName] = useState(0);
-	const [click, setCklick] = useState(0);
 
 
 
@@ -53,9 +52,6 @@ function Markers() {
 		getInfo()
 	}, [])
 
-	useEffect(() => { //odešle pžadavek na spojení se serverem  a díky tomu se vypíší data do popupu
-		getInfo()
-	}, [click])
 
 
 	return (
@@ -68,12 +64,11 @@ function Markers() {
 						<input type="text" onChange={(event) => setName(event.target.value)} />
 						<button onClick={() => {
 							updateMarker(val.id)
-							setCklick(click + 1)
-							console.log(click)
 						}
 						}>Aktualizovat</button>
 						<h2>{val.latitude}</h2>
 						<h2>{val.longitude}</h2>
+						<h2>{val.category_name}</h2>
 
 						<button onClick={() => deleteMarker(val.id)}>Smazat</button>
 					</Popup>

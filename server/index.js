@@ -22,7 +22,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 
 
 	db.query(
-		'INSERT INTO anchorage (name, latitude, longitude) VALUES (?, ?, ?)',
+		'INSERT INTO anchorage (name, latitude, longitude, capacity_id) VALUES (?, ?, ?, ?)',
 		[name, latitude, longitude],
 		(err, result) => {
 			if (err) {
@@ -38,7 +38,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 })
 
 app.get('/kot', (reg, res) => { //čtení záznamu
-	db.query('SELECT anchorage.*, category.name AS category_name FROM anchorage JOIN category ON anchorage.category_id = category.id',
+	db.query('SELECT anchorage.*, water_deep.deep AS water_deep FROM anchorage JOIN water_deep ON anchorage.water_deep_id = water_deep.id',
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -46,6 +46,34 @@ app.get('/kot', (reg, res) => { //čtení záznamu
 			else {
 				res.send(result)
 				console.log("data")
+			}
+		}
+	)
+})
+
+app.get('/deep', (reg, res) => { //čtení záznamu
+	db.query('SELECT * FROM water_deep',
+		(err, result) => {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				res.send(result)
+				console.log("data from deep")
+			}
+		}
+	)
+})
+
+app.get('/capacity', (reg, res) => { //čtení záznamu
+	db.query('SELECT * FROM capacity',
+		(err, result) => {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				res.send(result)
+				console.log("data from capacity")
 			}
 		}
 	)

@@ -9,17 +9,37 @@ import "./Button.css"
 import Axios from "axios"
 import { Marker, useMap, Popup } from 'react-leaflet'
 import Anchorage from './Anchorage';
+import Buoy from './Buoy';
+import CityDock from "./CityDock";
+import Marina from './Marina';
+
 
 function Button() {
-	const [showInfo, setShowInfo] = useState(false); //nastavení zobrazení makeru
+	const [showCategory, setShowCategory] = useState(false); //po kliknutí na tlačítko přidat zobrazí kategorie
+	const [showMaker, setShowMaker] = useState()
 
 	const CustomControl = ({ position }) => {
 		const buttonRef = useRef(null);
 
+		const category = () => {
+			return(
+				<div>
+					<button onClick={() => setShowMaker(1)}>Anchorage</button>
+					{showMaker == 1 && AddMarker()}
+					<button onClick={() => setShowMaker(2)}>Buoy</button>
+					{showMaker == 2 && AddMarker()}
+					<button onClick={() => setShowMaker(3)}>City dock</button>
+					{showMaker == 3 && AddMarker()}
+					<button onClick={() => setShowMaker(4)}>Marina</button>
+					{showMaker == 4 && AddMarker()}
+				</div>
+			)
+		}
+
 		const AddMarker = () => {
 			const map = useMap()
 			const latlng = map.getCenter(); // získání souřadnic středu mapy
-		
+
 			const [draggable, setDraggable] = useState(false)
 			const [position, setPosition] = useState(latlng)
 			const markerRef = useRef(null)
@@ -53,6 +73,7 @@ function Button() {
 				setDraggable((d) => !d)
 			}, [])
 
+			const [category, setCategory] = useState()
 
 			return <Marker //přidání markeru
 				position={position}
@@ -60,7 +81,11 @@ function Button() {
 				eventHandlers={eventHandlers}
 				ref={markerRef}>
 				<Popup minWidth={90}>
-					<Anchorage></Anchorage>
+					{showMaker == 1 && <Anchorage/>}
+					{showMaker == 2 && <Buoy/>}
+					{showMaker == 3 && <CityDock/>}
+					{showMaker == 4 && <Marina/>}
+
 					<button onClick={addInfo}>Přidat info</button>
 
 					<span onClick={toggleDraggable}>
@@ -83,8 +108,8 @@ function Button() {
 					zIndex: 1000
 				}}
 			>
-				<button onClick={() => setShowInfo(!showInfo)}>Tlačítko</button>
-				{showInfo && AddMarker()}
+				<button onClick={() => setShowCategory(!showCategory)}>Add maker</button>
+				{showCategory && category()}
 			</div>
 		);
 	};

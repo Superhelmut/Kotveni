@@ -22,7 +22,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 
 
 	db.query(
-		'INSERT INTO kotva (name, latitude, longitude, category_id) VALUES (?, ?, ?, ?)',
+		'INSERT INTO anchorage (name, latitude, longitude, category_id) VALUES (?, ?, ?, ?)',
 		[name, latitude, longitude, category_id],
 		(err, result) => {
 			if (err) {
@@ -38,7 +38,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 })
 
 app.get('/kot', (reg, res) => { //čtení záznamu
-	db.query('SELECT kotva.*, category.name AS category_name FROM kotva JOIN category ON kotva.category_id = category.id',
+	db.query('SELECT anchorage.*, category.name AS category_name FROM anchorage JOIN category ON anchorage.category_id = category.id',
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -56,7 +56,7 @@ app.put('/update', (reg, res) => { //aktualizace záznamu
 	const name = reg.body.name
 	const latitude = reg.body.latitude
 	const longitude = reg.body.longitude
-	db.query('UPDATE kotva SET name = ? WHERE id = ?', [name, id], (err, result) => {
+	db.query('UPDATE anchorage SET name = ? WHERE id = ?', [name, id], (err, result) => {
 		if (err) {
 			console.log(err)
 		}
@@ -68,7 +68,7 @@ app.put('/update', (reg, res) => { //aktualizace záznamu
 
 app.delete("/delete/:id", (req, res) => { //smazání záznamu
 	const id = req.params.id;
-	db.query("DELETE FROM kotva WHERE id = ?", id, (err, result) => {
+	db.query("DELETE FROM anchorage WHERE id = ?", id, (err, result) => {
 	  if (err) {
 		console.log(err);
 	  } else {

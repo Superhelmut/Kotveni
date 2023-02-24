@@ -19,6 +19,8 @@ function Button() {
 			const map = useMap()
 			const latlng = map.getCenter(); // získání souřadnic středu mapy
 			const [name, setName] = useState("");
+			const [capacity, setCapacity] = useState(100)
+			const [waterDeep, setWaterDeep] = useState(10)
 			const [draggable, setDraggable] = useState(false)
 			const [position, setPosition] = useState(latlng)
 			const markerRef = useRef(null)
@@ -32,6 +34,7 @@ function Button() {
 					latitude: latitude,
 					longitude: longitude,
 					category_id: isChecked,
+					capacity: capacity,
 				}).then(() => console.log("úspěch"))
 			}
 
@@ -49,11 +52,11 @@ function Button() {
 			const toggleDraggable = useCallback(() => { //zjišťování, zda bylo z markerem hnuto
 				setDraggable((d) => !d)
 			}, [])
-			
+
 			const handleCheckboxChange = (event) => { //zjistí, který radiobutton je zaškrtnutý a odešlš hodnotu do isChecked
 				setIsChecked(event.target.value);
-			  };
-			  
+			};
+
 
 			return <Marker //přidání markeru
 				position={position}
@@ -80,8 +83,35 @@ function Button() {
 					<input type="radio" value="3" name='radiobutton' checked={isChecked.mestkeMolo} onChange={handleCheckboxChange} />
 					<label> Marina </label>
 					<input type="radio" value="4" name='radiobutton' checked={isChecked.marina} onChange={handleCheckboxChange} />
-
 					<p></p>
+					<label>Capacity</label>
+					<input
+						type="range"
+						min="0"
+						max="200"
+						value={capacity} //value prop je spojen s komponentní state pro zobrazení aktuální hodnoty
+						step="1"
+						onChange={(event) => setCapacity(event.target.value)} //onChange obsluhuje změny hodnoty vstupu a aktualizuje stav komponenty
+					/>
+					<button onClick={() => setCapacity(capacity + 1)}>+</button>
+					<button onClick={() => setCapacity(capacity - 1)}>-</button>
+
+
+					<p>{capacity}</p>
+					<p></p>
+					<label>Water deep</label>
+					<input
+						type="range"
+						min="0"
+						max="20"
+						value={waterDeep} //value prop je spojen s komponentní state pro zobrazení aktuální hodnoty
+						step="1"
+						onChange={(event) => setWaterDeep(event.target.value)} //onChange obsluhuje změny hodnoty vstupu a aktualizuje stav komponenty
+					/>
+					<button onClick={() => setWaterDeep(waterDeep + 1)}>+</button>
+					<button onClick={() => setWaterDeep(waterDeep - 1)}>-</button>
+
+					<p>{waterDeep}</p>					<p></p>
 					<button onClick={addInfo}>Přidat info</button>
 					<p></p>
 					{console.log(position.lat)}

@@ -68,7 +68,8 @@ function Markers() {
 						}>Aktualizovat</button>
 						<h2>{val.latitude}</h2>
 						<h2>{val.longitude}</h2>
-						<h2>{val.category_name}</h2>
+						<label>Capacity</label>
+						<h2>{val.capacityID}</h2>
 
 						<button onClick={() => deleteMarker(val.id)}>Smazat</button>
 					</Popup>

@@ -3,13 +3,20 @@ import React, { useState, useEffect } from 'react';
 import WaterDeep from "./database/WaterDeep";
 import Capacity from "./database/Capacity";
 
-function Anchorage() {
+
+function Anchorage(props) {
 	const [name, setName] = useState("");
 	const [list, setList] = useState([]);
 	const [isChecked, setIsChecked] = useState(""); //nastavuje radiobuttony
+	const [selectedItemId, setSelectedItemId] = useState("");
+	props.onAnchorage(name, selectedItemId)
 
 	const handleCheckboxChange = (event) => { //zjistí, který checkbox je zaškrtnutý a odešle hodnotu do isChecked
 		setIsChecked(event.target.value);
+	};
+
+	const handleSelectedItemId = (id) => { // definovat callback funkci
+		setSelectedItemId(id); // aktualizovat stav selectedItemId
 	};
 
 	return (
@@ -18,7 +25,7 @@ function Anchorage() {
 			<label>Name </label>
 			<input type="text" onChange={(event) => setName(event.target.value)} />
 			<p></p>
-			<Capacity />
+			<Capacity onSelectedItemId={handleSelectedItemId} />
 			<p></p>
 			<WaterDeep />
 			<h2>Wind</h2>

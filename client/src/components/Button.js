@@ -43,15 +43,26 @@ function Button() {
 			const [draggable, setDraggable] = useState(false)
 			const [position, setPosition] = useState(latlng)
 			const markerRef = useRef(null)
+			const [getName, setGetName] = useState("")
+			const [capacityId, setCapacityId] = useState()
+
+			const handleSetAnchorage = (name, selectedItemId) => { // definovat callback funkci
+				setGetName(name); // aktualizovat stav selectedItemId
+				setCapacityId(selectedItemId)
+			};
+
+			const handleSetCapacityId = (selectedItemId) => {
+				setCapacityId(selectedItemId)
+			}
 
 			const addInfo = () => { //spojení se serverem -> přidání záznamu
 				const latitude = position.lat
 				const longitude = position.lng
-				const name = Anchorage.name
 				Axios.post("http://localhost:3001/create", {
-					name: name,
+					name: getName,
 					latitude: latitude,
 					longitude: longitude,
+					capacity: capacityId
 					/*category_id: isChecked,
 					waterDeep: waterDeep,*/
 				}).then(() => console.log("úspěch"))
@@ -80,7 +91,7 @@ function Button() {
 				eventHandlers={eventHandlers}
 				ref={markerRef}>
 				<Popup minWidth={90}>
-					{showMaker == 1 && <Anchorage />}
+				{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
 					{showMaker == 2 && <Buoy />}
 					{showMaker == 3 && <CityDock />}
 					{showMaker == 4 && <Marina />}

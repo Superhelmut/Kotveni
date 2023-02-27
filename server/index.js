@@ -20,6 +20,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 	const longitude = reg.body.longitude
 	const capacity_id = reg.body.capacity
 
+	console.log(capacity_id)
 
 	db.query(
 		'INSERT INTO anchorage (name, latitude, longitude, capacity_id) VALUES (?, ?, ?, ?)',
@@ -38,7 +39,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 })
 
 app.get('/kot', (reg, res) => { //čtení záznamu
-	db.query('SELECT anchorage.*, water_deep.deep AS water_deep FROM anchorage JOIN water_deep ON anchorage.water_deep_id = water_deep.id',
+	db.query('SELECT anchorage.*, capacity.capacity AS capacityID FROM anchorage JOIN capacity ON anchorage.capacity_id = capacity.id',
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -50,6 +51,7 @@ app.get('/kot', (reg, res) => { //čtení záznamu
 		}
 	)
 })
+
 
 app.get('/deep', (reg, res) => { //čtení záznamu
 	db.query('SELECT * FROM water_deep',

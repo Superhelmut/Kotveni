@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Axios from "axios"
 
 
-const Capacity = () => {
+const Capacity = (props) => {
 
 	const [capacity, setCapacity] = useState(100)
 	const [maxCapacity, setMaxCapacity] = useState()
 	const [minCapacity, setMinCapacity] = useState()
 	const [selectedItemId, setSelectedItemId] = useState();
 	const [capacityData, setCapacityData] = useState([]);
-	console.log("capacityData")
 
 	const getInfoCapacity = async () => {
 		try {
@@ -20,7 +19,6 @@ const Capacity = () => {
 			const minCapacity = Math.min(...capacityValues);
 			setMaxCapacity(maxCapacity);
 			setMinCapacity(minCapacity);
-			console.log("server")
 		} catch (error) {
 			console.error(error);
 		}
@@ -36,8 +34,10 @@ const Capacity = () => {
 			const selectedItem = capacityData.find((item) => item.capacity === capacity);
 			if (selectedItem) {
 				setSelectedItemId(selectedItem.id);
+				props.onSelectedItemId(selectedItem.id)
 			} else {
-				setSelectedItemId(3);
+				setSelectedItemId(null);
+				props.onSelectedItemId(null)
 			}
 		}
 	}, [capacityData, capacity]);

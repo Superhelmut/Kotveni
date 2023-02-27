@@ -22,7 +22,7 @@ function Button() {
 		const buttonRef = useRef(null);
 
 		const category = () => {
-			return(
+			return (
 				<div>
 					<button onClick={() => setShowMaker(1)}>Anchorage</button>
 					{showMaker == 1 && AddMarker()}
@@ -53,7 +53,6 @@ function Button() {
 					latitude: latitude,
 					longitude: longitude,
 					/*category_id: isChecked,
-					capacity: capacity,
 					waterDeep: waterDeep,*/
 				}).then(() => console.log("úspěch"))
 			}
@@ -81,10 +80,10 @@ function Button() {
 				eventHandlers={eventHandlers}
 				ref={markerRef}>
 				<Popup minWidth={90}>
-					{showMaker == 1 && <Anchorage/>}
-					{showMaker == 2 && <Buoy/>}
-					{showMaker == 3 && <CityDock/>}
-					{showMaker == 4 && <Marina/>}
+					{showMaker == 1 && <Anchorage />}
+					{showMaker == 2 && <Buoy />}
+					{showMaker == 3 && <CityDock />}
+					{showMaker == 4 && <Marina />}
 
 					<button onClick={addInfo}>Přidat info</button>
 

@@ -32,17 +32,16 @@ const Capacity = () => {
 	}, [])
 
 	useEffect(() => {
-		console.log("capacitydata", capacityData)
-		console.log("capacity", capacity)
-		const selectedItem = capacityData.find((item) => item.capacity === capacity);
-		console.log("selecteditemid", capacityData.find((item) => item.capacity === capacity))
-		if (selectedItem) {
-			setSelectedItemId(selectedItem.id);
-		} else {
-			setSelectedItemId(3);
+		if (capacityData.length > 0) {
+			const selectedItem = capacityData.find((item) => item.capacity === capacity);
+			if (selectedItem) {
+				setSelectedItemId(selectedItem.id);
+			} else {
+				setSelectedItemId(3);
+			}
 		}
-
 	}, [capacityData, capacity]);
+
 
 	return (
 		<div>
@@ -51,14 +50,30 @@ const Capacity = () => {
 				type="range"
 				min={minCapacity}
 				max={maxCapacity}
-				value={capacity} //value prop je spojen s komponentní state pro zobrazení aktuální hodnoty
+				value={capacity}
 				step="1"
-				onChange={(event) => { setCapacity(event.target.value); console.log("change",event.target.value)}} //onChange obsluhuje změny hodnoty vstupu a aktualizuje stav komponenty
-
+				onChange={(event) => {
+					const newCapacity = parseInt(event.target.value); // převést řetězec na číslo
+					setCapacity(newCapacity); // aktualizovat stav capacity
+					const selectedItem = capacityData.find((item) => item.capacity === newCapacity); // najít odpovídající prvek v poli capacityData
+					if (selectedItem) {
+						setSelectedItemId(selectedItem.id); // aktualizovat stav selectedItemId
+					} else {
+						setSelectedItemId(3); // při neexistujícím prvku nastavit výchozí id
+					}
+				}}
 			/>
-			<input type="text" onChange={(event) => { setCapacity(event.target.value) }} />
-			<button onClick={() => setCapacity(capacity + 1)}>+</button>
-			<button onClick={() => setCapacity(capacity - 1)}>-</button>
+
+			<input type="text" onChange={(event) => {
+				const newCapacity = parseInt(event.target.value); // převést řetězec na číslo
+				setCapacity(newCapacity); // aktualizovat stav capacity
+				const selectedItem = capacityData.find((item) => item.capacity === newCapacity); // najít odpovídající prvek v poli capacityData
+				if (selectedItem) {
+					setSelectedItemId(selectedItem.id); // aktualizovat stav selectedItemId
+				} else {
+					setSelectedItemId(3); // při neexistujícím prvku nastavit výchozí id
+				}
+			}} />
 			<p>{selectedItemId}</p>
 
 			<p>{capacity}</p>

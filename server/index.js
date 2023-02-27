@@ -18,12 +18,12 @@ app.post('/create', (reg, res) => { //přidání záznamu
 	const name = reg.body.name
 	const latitude = reg.body.latitude
 	const longitude = reg.body.longitude
-	//const category_id = reg.body.category_id
+	const capacity_id = reg.body.capacity
 
 
 	db.query(
 		'INSERT INTO anchorage (name, latitude, longitude, capacity_id) VALUES (?, ?, ?, ?)',
-		[name, latitude, longitude],
+		[name, latitude, longitude, capacity_id],
 		(err, result) => {
 			if (err) {
 				console.log(err)

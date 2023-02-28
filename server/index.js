@@ -21,6 +21,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 	const capacity_id = reg.body.capacity
 	const water_deep_id = reg.body.waterDeep
 	const wind_id = reg.body.wind
+	const bottom_id = reg.body.bottom
 
 	console.log(wind_id)
 
@@ -34,15 +35,28 @@ app.post('/create', (reg, res) => { //přidání záznamu
 			else {
 				const anchorage_id = result.insertId; //získání ID nového záznamu v tabulce anchorage
 
-				const values = wind_id.map((id) => [anchorage_id, id]); //vytvoření pole hodnot pro vkládání do tabulky anchorage_wind
+				const valuesWind = wind_id.map((id) => [anchorage_id, id]); //vytvoření pole hodnot pro vkládání do tabulky anchorage_wind
+				const valuesBottom = bottom_id.map((id) => [anchorage_id, id])
 				db.query(
 					'INSERT INTO anchorage_wind (anchorage_id, wind_id) VALUES ?',
-					[values],
+					[valuesWind],
 					(err, result) => {
 						if (err) {
 							console.log(err);
 						} else {
-							res.send("Data odeslána");
+							res.end("Data odeslána");
+						}
+					}
+				);
+
+				db.query(
+					'INSERT INTO anchorage_bottom (anchorage_id, bottom_id) VALUES ?',
+					[valuesBottom],
+					(err, result) => {
+						if (err) {
+							console.log(err);
+						} else {
+							res.end("Data odeslána");
 						}
 					}
 				);
@@ -53,15 +67,18 @@ app.post('/create', (reg, res) => { //přidání záznamu
 
 })
 
-app.get('/kot', (reg, res) => { //čtení záznamu
+app.get('/kot', (reg, res) => {
 	db.query(
-		'SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(wind.wind) AS wind ' +
+		'SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(wind.wind) AS wind, GROUP_CONCAT(bottom.bottom) AS bottom ' +
 		'FROM anchorage ' +
 		'JOIN capacity ON anchorage.capacity_id = capacity.id ' +
 		'JOIN water_deep ON anchorage.water_deep_id = water_deep.id ' +
 		'LEFT JOIN anchorage_wind ON anchorage.id = anchorage_wind.anchorage_id ' +
+		'LEFT JOIN anchorage_bottom ON anchorage.id = anchorage_bottom.anchorage_id ' +
+		'LEFT JOIN bottom ON bottom.id = anchorage_bottom.bottom_id ' +
 		'LEFT JOIN wind ON wind.id = anchorage_wind.wind_id ' +
 		'GROUP BY anchorage.id',
+
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -73,6 +90,7 @@ app.get('/kot', (reg, res) => { //čtení záznamu
 		}
 	)
 })
+
 
 
 

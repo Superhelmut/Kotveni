@@ -8,10 +8,10 @@ import React, { useRef, useState, useCallback, useMemo, } from 'react';
 import "./Button.css"
 import Axios from "axios"
 import { Marker, useMap, Popup } from 'react-leaflet'
-import Anchorage from './Anchorage';
-import Buoy from './Buoy';
-import CityDock from "./CityDock";
-import Marina from './Marina';
+import Anchorage from './categories/Anchorage';
+import Buoy from './categories/Buoy';
+import CityDock from "./categories/CityDock";
+import Marina from './categories/Marina';
 
 
 function Button() {
@@ -47,14 +47,15 @@ function Button() {
 			const [capacityId, setCapacityId] = useState()
 			const [waterDeepId, setWaterDeepId] = useState()
 			const [windId, setWindId] = useState()
+			const [bottomId, setBottomId] = useState()
 
-			const handleSetAnchorage = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind) => { // definovat callback funkci
+			const handleSetAnchorage = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdBottom) => { // definovat callback funkci
 				setGetName(name); // aktualizovat stav selectedItemId
 				setCapacityId(selectedItemId)
 				setWaterDeepId(selectedItemIdWaterDeep)
 				setWindId(selectedItemIdWind)
+				setBottomId(selectedItemIdBottom)
 			};
-			console.log(windId)
 
 			const addInfo = () => { //spojení se serverem -> přidání záznamu
 				const latitude = position.lat
@@ -65,7 +66,8 @@ function Button() {
 					longitude: longitude,
 					capacity: capacityId,
 					waterDeep: waterDeepId,
-					wind: windId
+					wind: windId,
+					bottom: bottomId
 				}).then(() => console.log("úspěch"))
 			}
 

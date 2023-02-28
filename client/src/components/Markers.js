@@ -25,12 +25,14 @@ function Markers() {
 						latitude: anchorage.latitude,
 						longitude: anchorage.longitude,
 						winds: [anchorage.wind],
+						bottom: [anchorage.bottom],
 						capacity: anchorage.capacity,
 						waterDeep: anchorage.waterDeep,
 					});
 				} else {
 					let currAnchorage = anchorageMap.get(anchorage.id);
 					currAnchorage.winds.push(anchorage.wind);
+					currAnchorage.bottom.push(anchorage.bottom)
 					anchorageMap.set(anchorage.id, currAnchorage);
 				}
 			})
@@ -86,16 +88,19 @@ function Markers() {
 						}>Aktualizovat</button>
 						<h2>{val.latitude}</h2>
 						<h2>{val.longitude}</h2>
-						<label>Capacity</label>
-						<h2>{val.capacity}</h2>
-						<label>Water deep</label>
-						<h2>{val.waterDeep}</h2>
-						<label>Wind</label>
-						<ul>
-							{val.winds.map((wind) => (
-								<li key={wind}>{wind}</li>
-							))}
-						</ul>
+						<h2>Capacity</h2>
+						<p>{val.capacity}</p>
+						<h2>Water deep</h2>
+						<p>{val.waterDeep}</p>
+						<h2>Wind</h2>
+						{val.winds.map((wind) => (
+							<p key={wind}>{wind}</p>
+						))}
+						<h2>Bottom</h2>
+						{val.bottom.map((bottom) => (
+							<p key={bottom}>{bottom}</p>
+						))}
+
 						<button onClick={() => deleteMarker(val.id)}>Smazat</button>
 					</Popup>
 				</Marker>

@@ -8,15 +8,15 @@ function Anchorage(props) {
 	const [name, setName] = useState("");
 	const [list, setList] = useState([]);
 	const [isChecked, setIsChecked] = useState(""); //nastavuje radiobuttony
-	const [selectedItemId, setSelectedItemId] = useState("");
-	props.onAnchorage(name, selectedItemId)
+	const [selectedItemIdCapacity, setSelectedItemIdCapacity] = useState("");
+	props.onAnchorage(name, selectedItemIdCapacity)
 
 	const handleCheckboxChange = (event) => { //zjistí, který checkbox je zaškrtnutý a odešle hodnotu do isChecked
 		setIsChecked(event.target.value);
 	};
 
-	const handleSelectedItemId = (id) => { // definovat callback funkci
-		setSelectedItemId(id); // aktualizovat stav selectedItemId
+	const handleSelectedItemIdCapacity = (id) => { // definovat callback funkci
+		setSelectedItemIdCapacity(id); // aktualizovat stav selectedItemIdCapacity
 	};
 
 	return (
@@ -25,7 +25,7 @@ function Anchorage(props) {
 			<label>Name </label>
 			<input type="text" onChange={(event) => setName(event.target.value)} />
 			<p></p>
-			<Capacity onSelectedItemId={handleSelectedItemId} />
+			<Capacity onSelectedItemIdCapacity={handleSelectedItemIdCapacity} />
 			<p></p>
 			<WaterDeep />
 			<h2>Wind</h2>

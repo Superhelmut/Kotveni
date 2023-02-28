@@ -34,10 +34,10 @@ const Capacity = (props) => {
 			const selectedItem = capacityData.find((item) => item.capacity === capacity);
 			if (selectedItem) {
 				setSelectedItemId(selectedItem.id);
-				props.onSelectedItemId(selectedItem.id)
+				props.onSelectedItemIdCapacity(selectedItem.id)
 			} else {
 				setSelectedItemId(null);
-				props.onSelectedItemId(null)
+				props.onSelectedItemIdCapacity(null)
 			}
 		}
 	}, [capacityData, capacity]);
@@ -59,7 +59,7 @@ const Capacity = (props) => {
 					if (selectedItem) {
 						setSelectedItemId(selectedItem.id); // aktualizovat stav selectedItemId
 					} else {
-						setSelectedItemId(3); // při neexistujícím prvku nastavit výchozí id
+						setSelectedItemId(null); // při neexistujícím prvku nastavit výchozí id
 					}
 				}}
 			/>
@@ -71,7 +71,7 @@ const Capacity = (props) => {
 				if (selectedItem) {
 					setSelectedItemId(selectedItem.id); // aktualizovat stav selectedItemId
 				} else {
-					setSelectedItemId(3); // při neexistujícím prvku nastavit výchozí id
+					setSelectedItemId(null); // při neexistujícím prvku nastavit výchozí id
 				}
 			}} />
 			<p>{selectedItemId}</p>

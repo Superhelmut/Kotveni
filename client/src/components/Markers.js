@@ -36,7 +36,6 @@ function Markers() {
 			})
 			const uniqueAnchorageData = Array.from(anchorageMap.values());
 			setList(uniqueAnchorageData);
-			console.log(uniqueAnchorageData, "uniq");
 		})
 	}
 
@@ -97,7 +96,6 @@ function Markers() {
 								<li key={wind}>{wind}</li>
 							))}
 						</ul>
-						{console.log(val, "val")}
 						<button onClick={() => deleteMarker(val.id)}>Smazat</button>
 					</Popup>
 				</Marker>

@@ -10,7 +10,8 @@ function Anchorage(props) {
 	const [list, setList] = useState([]);
 	const [selectedItemIdCapacity, setSelectedItemIdCapacity] = useState("");
 	const [selectedItemIdWaterDeep, setSelectedItemIdWaterDeep] = useState("")
-	props.onAnchorage(name, selectedItemIdCapacity, selectedItemIdWaterDeep)
+	const [selectedItemIdWind, setSelectedItemIdWind] = useState("")
+	props.onAnchorage(name, selectedItemIdCapacity, selectedItemIdWaterDeep, selectedItemIdWind)
 
 	const handleSelectedItemIdCapacity = (id) => { // definovat callback funkci
 		setSelectedItemIdCapacity(id); // aktualizovat stav selectedItemIdCapacity
@@ -18,6 +19,10 @@ function Anchorage(props) {
 
 	const handleSelectedItemIdWaterDeep = (id) => {
 		setSelectedItemIdWaterDeep(id)
+	}
+
+	const handleSelectedItemIdWind = (id) => {
+		setSelectedItemIdWind(id)
 	}
 
 	return (
@@ -30,7 +35,7 @@ function Anchorage(props) {
 			<p></p>
 			<WaterDeep onSelectedItemIdWaterDeep={handleSelectedItemIdWaterDeep} />
 			<h2>Wind</h2>
-			<Wind />
+			<Wind onSelectedItemIdWind={handleSelectedItemIdWind}/>
 
 
 		</div>

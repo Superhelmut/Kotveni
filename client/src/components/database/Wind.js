@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
 
-const Wind = () => {
+const Wind = (props) => {
 	const [isChecked, setIsChecked] = useState([]);
 
-	const handleCheckboxChange = (event) => { //zjistí, který checkbox je zaškrtnutý a odešle hodnotu do isChecked
-		setIsChecked(event.target.value);
+	const handleCheckboxChange = (event) => {
+		const value = event.target.value;
+		if (isChecked.includes(value)) {
+			setIsChecked(isChecked.filter(val => val !== value));
+		} else {
+			setIsChecked([...isChecked, value]);
+		}
 	};
 
 	useEffect(() => {
-		const value = [isChecked]
-		console.log(value);
-	  }, [isChecked]);
+	}, [isChecked]);
 
+	props.onSelectedItemIdWind(isChecked)
 
 	return (
 		<div>

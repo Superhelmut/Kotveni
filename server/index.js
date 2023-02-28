@@ -20,8 +20,9 @@ app.post('/create', (reg, res) => { //přidání záznamu
 	const longitude = reg.body.longitude
 	const capacity_id = reg.body.capacity
 	const water_deep_id = reg.body.waterDeep
+	const wind_id = reg.body.wind
 
-	console.log(capacity_id)
+	console.log(wind_id)
 
 	db.query(
 		'INSERT INTO anchorage (name, latitude, longitude, capacity_id, water_deep_id) VALUES (?, ?, ?, ?, ?)',
@@ -31,7 +32,20 @@ app.post('/create', (reg, res) => { //přidání záznamu
 				console.log(err)
 			}
 			else {
-				res.send("Data odeslána")
+				const anchorage_id = result.insertId; //získání ID nového záznamu v tabulce anchorage
+
+				const values = wind_id.map((id) => [anchorage_id, id]); //vytvoření pole hodnot pro vkládání do tabulky anchorage_wind
+				db.query(
+					'INSERT INTO anchorage_wind (anchorage_id, wind_id) VALUES ?',
+					[values],
+					(err, result) => {
+						if (err) {
+							console.log(err);
+						} else {
+							res.send("Data odeslána");
+						}
+					}
+				);
 			}
 		}
 

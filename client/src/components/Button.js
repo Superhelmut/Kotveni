@@ -48,6 +48,10 @@ function Button() {
 			const [waterDeepId, setWaterDeepId] = useState()
 			const [windId, setWindId] = useState()
 			const [bottomId, setBottomId] = useState()
+			const [equipmentId, setEquipmentId] = useState()
+
+			console.log(equipmentId,"equ")
+			console.log(bottomId,"bott")
 
 			const handleSetAnchorage = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdBottom) => { // definovat callback funkci
 				setGetName(name); // aktualizovat stav selectedItemId
@@ -63,6 +67,14 @@ function Button() {
 				setWaterDeepId(selectedItemIdWaterDeep)
 				setWindId(selectedItemIdWind)
 				setBottomId(selectedItemIdBottom)
+			};
+
+			const handleSetCityDock = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdCityDock) => { // definovat callback funkci
+				setGetName(name); // aktualizovat stav selectedItemId
+				setCapacityId(selectedItemId)
+				setWaterDeepId(selectedItemIdWaterDeep)
+				setWindId(selectedItemIdWind)
+				setEquipmentId(selectedItemIdCityDock)
 			};
 
 
@@ -91,6 +103,18 @@ function Button() {
 						bottom: bottomId
 					}).then(() => console.log("úspěch"))
 				}
+				else if (showMaker == 3) {
+					Axios.post("http://localhost:3001/createCityDock", {
+						name: getName,
+						latitude: latitude,
+						longitude: longitude,
+						capacity: capacityId,
+						waterDeep: waterDeepId,
+						wind: windId,
+						equipment: equipmentId
+					}).then(() => console.log("úspěch"))
+				}
+
 			}
 
 			const eventHandlers = useMemo( //zjišťování pozice markeru při přesouvání
@@ -119,7 +143,7 @@ function Button() {
 					<Popup>
 						{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
 						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy}/>}
-						{showMaker == 3 && <CityDock />}
+						{showMaker == 3 && <CityDock onCityDock={handleSetCityDock}/>}
 						{showMaker == 4 && <Marina />}
 
 						<button onClick={addInfo}>Přidat info</button>

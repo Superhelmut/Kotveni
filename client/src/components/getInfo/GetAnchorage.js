@@ -76,6 +76,7 @@ const GetAnchorage = () => {
 				<Marker key={val.id} position={[val.latitude, val.longitude]}>
 					<Popup>
 						<h1>{val.name} </h1>
+						<h1>Anchorage</h1>
 						<input type="text" onChange={(event) => setName(event.target.value)} />
 						<button onClick={() => {
 							updateMarker(val.id)

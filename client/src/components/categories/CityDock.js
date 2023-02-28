@@ -1,91 +1,69 @@
-import "./CityDock.css"
-import React, { useState } from 'react';
+import "./Buoy.css"
+import React, { useState, useEffect } from 'react';
+import WaterDeep from "../database/WaterDeep";
+import Capacity from "../database/Capacity";
+import Wind from "../database/Wind";
+import Equipment from "../database/Equipment";
 
 
 
-function CityDock() {
+function CityDock(props) {
 	const [name, setName] = useState("");
-	const [capacity, setCapacity] = useState(100)
-	const [waterDeep, setWaterDeep] = useState(10)
-	const [isChecked, setIsChecked] = useState(""); //nastavuje radiobuttony
+	const [selectedItemIdCapacity, setSelectedItemIdCapacity] = useState("");
+	const [selectedItemIdWaterDeep, setSelectedItemIdWaterDeep] = useState("")
+	const [selectedItemIdWind, setSelectedItemIdWind] = useState("")
+	const [selectedItemIdEquipment, setSelectedItemIdEquipment] = useState("")
+	props.onCityDock(name, selectedItemIdCapacity, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdEquipment)
 
-	const handleCheckboxChange = (event) => { //zjistí, který checkbox je zaškrtnutý a odešle hodnotu do isChecked
-		setIsChecked(event.target.value);
+	const handleSelectedItemIdCapacity = (id) => { // definovat callback funkci
+		setSelectedItemIdCapacity(id); // aktualizovat stav selectedItemIdCapacity
 	};
 
+	const handleSelectedItemIdWaterDeep = (id) => {
+		setSelectedItemIdWaterDeep(id)
+	}
 
+	const handleSelectedItemIdWind = (id) => {
+		setSelectedItemIdWind(id)
+	}
+
+	const handleSelectedItemIdEquipment = (id) => {
+		setSelectedItemIdEquipment(id)
+	}
 
 	return (
-		<div>
+		<div className="container">
 			<h1>Add city dock</h1>
-			<label>Name </label>
-			<input type="text" onChange={(event) => setName(event.target.value)} />
-			<p></p>
+			<div className="row">
+				<div className="col">
+					<label>Name</label>
+					<input type="text" onChange={(event) => setName(event.target.value)} />
+				</div>
+				<div className="col">
+					<Capacity onSelectedItemIdCapacity={handleSelectedItemIdCapacity} />
+				</div>
+				<div className="col">
+					<div className="waterdeep">
+						<WaterDeep onSelectedItemIdWaterDeep={handleSelectedItemIdWaterDeep} />
+					</div>
+				</div>
 
-			<label>Capacity</label>
-			<input
-				type="range"
-				min="0"
-				max="200"
-				value={capacity} //value prop je spojen s komponentní state pro zobrazení aktuální hodnoty
-				step="1"
-				onChange={(event) => setCapacity(event.target.value)} //onChange obsluhuje změny hodnoty vstupu a aktualizuje stav komponenty
-			/>
-			<button onClick={() => setCapacity(capacity + 1)}>+</button>
-			<button onClick={() => setCapacity(capacity - 1)}>-</button>
+			</div>
+			<div className="row">
 
-
-			<p>{capacity}</p>
-			<p></p>
-			<label>Water deep</label>
-			<input
-				type="range"
-				min="0"
-				max="20"
-				value={waterDeep} //value prop je spojen s komponentní state pro zobrazení aktuální hodnoty
-				step="1"
-				onChange={(event) => setWaterDeep(event.target.value)} //onChange obsluhuje změny hodnoty vstupu a aktualizuje stav komponenty
-			/>
-			<button onClick={() => setWaterDeep(waterDeep + 1)}>+</button>
-			<button onClick={() => setWaterDeep(waterDeep - 1)}>-</button>
-
-			<p>{waterDeep}</p>
-
-			<h2>Wind</h2>
-
-			<label>North </label>
-			<input type="checkbox" value="1" name='checkbox' checked={isChecked.north} onChange={handleCheckboxChange} />
-			<p></p>
-			<label> Northeast </label>
-			<input type="checkbox" value="2" name='checkbox' checked={isChecked.northeast} onChange={handleCheckboxChange} />
-			<p></p>
-			<label>East </label>
-			<input type="checkbox" value="3" name='checkbox' checked={isChecked.east} onChange={handleCheckboxChange} />
-			<p></p>
-			<label> Southeast </label>
-			<input type="checkbox" value="4" name='checkbox' checked={isChecked.southeast} onChange={handleCheckboxChange} />
-			<p></p>
-			<label>South </label>
-			<input type="checkbox" value="5" name='checkbox' checked={isChecked.south} onChange={handleCheckboxChange} />
-			<p></p>
-			<label> Southwest </label>
-			<input type="checkbox" value="6" name='checkbox' checked={isChecked.southwest} onChange={handleCheckboxChange} />
-			<p></p>
-			<label>West </label>
-			<input type="checkbox" value="7" name='checkbox' checked={isChecked.west} onChange={handleCheckboxChange} />
-			<p></p>
-			<label> Northwest </label>
-			<input type="checkbox" value="8" name='checkbox' checked={isChecked.northwest} onChange={handleCheckboxChange} />
-			<p></p>
-
-			<h2>Equipment</h2>
-
-			<label>WC </label>
-			<input type="checkbox" value="1" name='checkbox' checked={isChecked.wc} onChange={handleCheckboxChange} />
-			<p></p>
-			<label> Shower </label>
-			<input type="checkbox" value="2" name='checkbox' checked={isChecked.shower} onChange={handleCheckboxChange} />
-			<p></p>
+				<div className="col">
+					<div className="wind">
+						<h2>Wind</h2>
+						<Wind onSelectedItemIdWind={handleSelectedItemIdWind} />
+					</div>
+				</div>
+				<div className="col">
+					<div className="equipment">
+						<h2>Equipment</h2>
+						<Equipment onSelectedItemIdEquipment={handleSelectedItemIdEquipment} />
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }

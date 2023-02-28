@@ -23,14 +23,14 @@ function Button() {
 
 		const category = () => {
 			return (
-				<div>
-					<button onClick={() => setShowMaker(1)}>Anchorage</button>
+				<div className='categoryButton'>
+					<button className='oneCategoryButton' onClick={() => setShowMaker(1)}>Anchorage</button>
 					{showMaker == 1 && AddMarker()}
-					<button onClick={() => setShowMaker(2)}>Buoy</button>
+					<button className='oneCategoryButton' onClick={() => setShowMaker(2)}>Buoy</button>
 					{showMaker == 2 && AddMarker()}
-					<button onClick={() => setShowMaker(3)}>City dock</button>
+					<button className='oneCategoryButton' onClick={() => setShowMaker(3)}>City dock</button>
 					{showMaker == 3 && AddMarker()}
-					<button onClick={() => setShowMaker(4)}>Marina</button>
+					<button className='oneCategoryButton' onClick={() => setShowMaker(4)}>Marina</button>
 					{showMaker == 4 && AddMarker()}
 				</div>
 			)
@@ -156,9 +156,10 @@ function Button() {
 				position={position}
 				draggable={draggable}
 				eventHandlers={eventHandlers}
-				ref={markerRef}>
+				ref={markerRef}
+				autoOpenPopup={true}>
 				<div className='popup'>
-					<Popup>
+					<Popup autoPan={true}>
 						{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
 						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy}/>}
 						{showMaker == 3 && <CityDock onCityDock={handleSetCityDock}/>}
@@ -189,7 +190,7 @@ function Button() {
 					zIndex: 1000
 				}}
 			>
-				<button onClick={() => setShowCategory(!showCategory)}>Add maker</button>
+				<button className='addMakerButton' onClick={() => setShowCategory(!showCategory)}>Add maker</button>
 				{showCategory && category()}
 			</div>
 		);

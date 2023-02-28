@@ -1,3 +1,13 @@
-.info input{
-	height: 30px;
-}
+.leaflet-popup {
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	padding: 10px;
+	max-width: 800px;
+
+  }
+  .leaflet-popup-content {
+	max-width: 800px;
+  }
+  

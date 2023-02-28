@@ -76,8 +76,6 @@ const WaterDeep = (props) => {
 					setSelectedItemWaterDeepId(null); // při neexistujícím prvku nastavit výchozí id
 				}
 			}} />
-			<p>{selectedItemWaterDeepIdDeep}</p>
-
 			<p>{waterDeep}</p>
 
 		</div>

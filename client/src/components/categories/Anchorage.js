@@ -8,7 +8,6 @@ import Bottom from "../database/Bottom";
 
 function Anchorage(props) {
 	const [name, setName] = useState("");
-	const [list, setList] = useState([]);
 	const [selectedItemIdCapacity, setSelectedItemIdCapacity] = useState("");
 	const [selectedItemIdWaterDeep, setSelectedItemIdWaterDeep] = useState("")
 	const [selectedItemIdWind, setSelectedItemIdWind] = useState("")
@@ -32,20 +31,38 @@ function Anchorage(props) {
 	}
 
 	return (
-		<div>
-			<h1>Add anchorage</h1>
-			<label>Name </label>
-			<input type="text" onChange={(event) => setName(event.target.value)} />
-			<p></p>
-			<Capacity onSelectedItemIdCapacity={handleSelectedItemIdCapacity} />
-			<p></p>
-			<WaterDeep onSelectedItemIdWaterDeep={handleSelectedItemIdWaterDeep} />
-			<h2>Wind</h2>
-			<Wind onSelectedItemIdWind={handleSelectedItemIdWind} />
-			<h2>Bottom</h2>
-			<Bottom onSelectedItemIdBottom={handleSelectedItemIdBottom}/>
+		<div className="container">
+			<h1>Add Anchorage</h1>
+			<div className="row">
+				<div className="col">
+					<label>Name</label>
+					<input type="text" onChange={(event) => setName(event.target.value)} />
+				</div>
+				<div className="col">
+					<Capacity onSelectedItemIdCapacity={handleSelectedItemIdCapacity} />
+				</div>
+				<div className="col">
+					<div className="waterdeep">
+						<WaterDeep onSelectedItemIdWaterDeep={handleSelectedItemIdWaterDeep} />
+					</div>
+				</div>
 
+			</div>
+			<div className="row">
 
+				<div className="col">
+					<div className="wind">
+						<h2>Wind</h2>
+						<Wind onSelectedItemIdWind={handleSelectedItemIdWind} />
+					</div>
+				</div>
+				<div className="col">
+					<div className="bottom">
+						<h2>Bottom</h2>
+						<Bottom onSelectedItemIdBottom={handleSelectedItemIdBottom} />
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 }

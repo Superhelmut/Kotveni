@@ -57,18 +57,40 @@ function Button() {
 				setBottomId(selectedItemIdBottom)
 			};
 
+			const handleSetBuoy = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdBottom) => { // definovat callback funkci
+				setGetName(name); // aktualizovat stav selectedItemId
+				setCapacityId(selectedItemId)
+				setWaterDeepId(selectedItemIdWaterDeep)
+				setWindId(selectedItemIdWind)
+				setBottomId(selectedItemIdBottom)
+			};
+
+
 			const addInfo = () => { //spojení se serverem -> přidání záznamu
 				const latitude = position.lat
 				const longitude = position.lng
-				Axios.post("http://localhost:3001/create", {
-					name: getName,
-					latitude: latitude,
-					longitude: longitude,
-					capacity: capacityId,
-					waterDeep: waterDeepId,
-					wind: windId,
-					bottom: bottomId
-				}).then(() => console.log("úspěch"))
+				if (showMaker == 1) {
+					Axios.post("http://localhost:3001/createAnchor", {
+						name: getName,
+						latitude: latitude,
+						longitude: longitude,
+						capacity: capacityId,
+						waterDeep: waterDeepId,
+						wind: windId,
+						bottom: bottomId
+					}).then(() => console.log("úspěch"))
+				}
+				else if (showMaker == 2) {
+					Axios.post("http://localhost:3001/createBuoy", {
+						name: getName,
+						latitude: latitude,
+						longitude: longitude,
+						capacity: capacityId,
+						waterDeep: waterDeepId,
+						wind: windId,
+						bottom: bottomId
+					}).then(() => console.log("úspěch"))
+				}
 			}
 
 			const eventHandlers = useMemo( //zjišťování pozice markeru při přesouvání
@@ -93,21 +115,25 @@ function Button() {
 				draggable={draggable}
 				eventHandlers={eventHandlers}
 				ref={markerRef}>
-				<Popup minWidth={90}>
-				{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
-					{showMaker == 2 && <Buoy />}
-					{showMaker == 3 && <CityDock />}
-					{showMaker == 4 && <Marina />}
+				<div className='popup'>
+					<Popup>
+						{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
+						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy}/>}
+						{showMaker == 3 && <CityDock />}
+						{showMaker == 4 && <Marina />}
 
-					<button onClick={addInfo}>Přidat info</button>
+						<button onClick={addInfo}>Přidat info</button>
 
-					<span onClick={toggleDraggable}>
-						{draggable
-							? <button>Ukončit posouvání bodu</button>
-							: <button>Posunout bod</button>}
-					</span>
+						<span onClick={toggleDraggable}>
+							{draggable
+								? <button>Ukončit posouvání bodu</button>
+								: <button>Posunout bod</button>}
+						</span>
 
-				</Popup>
+					</Popup>
+
+				</div>
+
 			</Marker>
 		}
 

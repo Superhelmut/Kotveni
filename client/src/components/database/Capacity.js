@@ -74,8 +74,6 @@ const Capacity = (props) => {
 					setSelectedItemId(null); // při neexistujícím prvku nastavit výchozí id
 				}
 			}} />
-			<p>{selectedItemId}</p>
-
 			<p>{capacity}</p>
 
 		</div>

@@ -69,7 +69,9 @@ function Markers() {
 						<h2>{val.latitude}</h2>
 						<h2>{val.longitude}</h2>
 						<label>Capacity</label>
-						<h2>{val.capacityID}</h2>
+						<h2>{val.capacity}</h2>
+						<label>Water deep</label>
+						<h2>{val.waterDeep}</h2>
 
 						<button onClick={() => deleteMarker(val.id)}>Smazat</button>
 					</Popup>

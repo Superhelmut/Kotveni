@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Axios from "axios"
 
 
-const WaterDeep = () => {
+const WaterDeep = (props) => {
 
 	const [waterDeep, setwaterDeep] = useState(10)
 	const [maxwaterDeep, setMaxwaterDeep] = useState()
 	const [minwaterDeep, setMinwaterDeep] = useState()
-	const [selectedItemIdDeep, setSelectedItemIdDeep] = useState();
+	const [selectedItemWaterDeepIdDeep, setSelectedItemWaterDeepId] = useState();
 	const [waterDeepData, setwaterDeepData] = useState([]);
 
 	const getInfowaterDeep = async () => {
@@ -33,13 +33,13 @@ const WaterDeep = () => {
 
 	useEffect(() => {
 		if (waterDeepData.length > 0) {
-			const selectedItem = waterDeepData.find((item) => item.deep === waterDeep);
-			if (selectedItem) {
-				setSelectedItemIdDeep(selectedItem.id);
-				//props.onSelectedItemIdDeep(selectedItem.id)
+			const selectedItemWaterDeep = waterDeepData.find((item) => item.deep === waterDeep);
+			if (selectedItemWaterDeep) {
+				setSelectedItemWaterDeepId(selectedItemWaterDeep.id);
+				props.onSelectedItemIdWaterDeep(selectedItemWaterDeep.id)
 			} else {
-				setSelectedItemIdDeep(15);
-				//props.onSelectedItemIdDeep(null)
+				setSelectedItemWaterDeepId(null);
+				props.onSelectedItemIdWaterDeep(null)
 			}
 		}
 	}, [waterDeepData, waterDeep]);
@@ -57,11 +57,11 @@ const WaterDeep = () => {
 				onChange={(event) => {
 					const newwaterDeep = parseInt(event.target.value); // převést řetězec na číslo
 					setwaterDeep(newwaterDeep); // aktualizovat stav waterDeep
-					const selectedItem = waterDeepData.find((item) => item.waterDeep === newwaterDeep); // najít odpovídající prvek v poli waterDeepData
-					if (selectedItem) {
-						setSelectedItemIdDeep(selectedItem.id); // aktualizovat stav selectedItemIdDeep
+					const selectedItemWaterDeep = waterDeepData.find((item) => item.waterDeep === newwaterDeep); // najít odpovídající prvek v poli waterDeepData
+					if (selectedItemWaterDeep) {
+						setSelectedItemWaterDeepId(selectedItemWaterDeep.id); // aktualizovat stav selectedItemWaterDeepIdDeep
 					} else {
-						setSelectedItemIdDeep(3); // při neexistujícím prvku nastavit výchozí id
+						setSelectedItemWaterDeepId(null); // při neexistujícím prvku nastavit výchozí id
 					}
 				}}
 			/>
@@ -69,14 +69,14 @@ const WaterDeep = () => {
 			<input type="text" onChange={(event) => {
 				const newwaterDeep = parseInt(event.target.value); // převést řetězec na číslo
 				setwaterDeep(newwaterDeep); // aktualizovat stav waterDeep
-				const selectedItem = waterDeepData.find((item) => item.waterDeep === newwaterDeep); // najít odpovídající prvek v poli waterDeepData
-				if (selectedItem) {
-					setSelectedItemIdDeep(selectedItem.id); // aktualizovat stav selectedItemIdDeep
+				const selectedItemWaterDeep = waterDeepData.find((item) => item.waterDeep === newwaterDeep); // najít odpovídající prvek v poli waterDeepData
+				if (selectedItemWaterDeep) {
+					setSelectedItemWaterDeepId(selectedItemWaterDeep.id); // aktualizovat stav selectedItemWaterDeepIdDeep
 				} else {
-					setSelectedItemIdDeep(3); // při neexistujícím prvku nastavit výchozí id
+					setSelectedItemWaterDeepId(null); // při neexistujícím prvku nastavit výchozí id
 				}
 			}} />
-			<p>{selectedItemIdDeep}</p>
+			<p>{selectedItemWaterDeepIdDeep}</p>
 
 			<p>{waterDeep}</p>
 

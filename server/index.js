@@ -19,12 +19,13 @@ app.post('/create', (reg, res) => { //přidání záznamu
 	const latitude = reg.body.latitude
 	const longitude = reg.body.longitude
 	const capacity_id = reg.body.capacity
+	const water_deep_id = reg.body.waterDeep
 
 	console.log(capacity_id)
 
 	db.query(
-		'INSERT INTO anchorage (name, latitude, longitude, capacity_id) VALUES (?, ?, ?, ?)',
-		[name, latitude, longitude, capacity_id],
+		'INSERT INTO anchorage (name, latitude, longitude, capacity_id, water_deep_id) VALUES (?, ?, ?, ?, ?)',
+		[name, latitude, longitude, capacity_id, water_deep_id],
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -39,7 +40,7 @@ app.post('/create', (reg, res) => { //přidání záznamu
 })
 
 app.get('/kot', (reg, res) => { //čtení záznamu
-	db.query('SELECT anchorage.*, capacity.capacity AS capacityID FROM anchorage JOIN capacity ON anchorage.capacity_id = capacity.id',
+	db.query('SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep FROM anchorage JOIN capacity ON anchorage.capacity_id = capacity.id JOIN water_deep ON anchorage.water_deep_id = water_deep.id',
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -99,13 +100,13 @@ app.put('/update', (reg, res) => { //aktualizace záznamu
 app.delete("/delete/:id", (req, res) => { //smazání záznamu
 	const id = req.params.id;
 	db.query("DELETE FROM anchorage WHERE id = ?", id, (err, result) => {
-	  if (err) {
-		console.log(err);
-	  } else {
-		res.send(result);
-	  }
+		if (err) {
+			console.log(err);
+		} else {
+			res.send(result);
+		}
 	});
-  });
+});
 
 app.listen(3001, () => {
 	console.log("tvůj server běží na portu 3001 ")

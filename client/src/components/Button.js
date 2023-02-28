@@ -45,15 +45,13 @@ function Button() {
 			const markerRef = useRef(null)
 			const [getName, setGetName] = useState("")
 			const [capacityId, setCapacityId] = useState()
+			const [waterDeepId, setWaterDeepId] = useState()
 
-			const handleSetAnchorage = (name, selectedItemId) => { // definovat callback funkci
+			const handleSetAnchorage = (name, selectedItemId, selectedItemIdWaterDeep) => { // definovat callback funkci
 				setGetName(name); // aktualizovat stav selectedItemId
 				setCapacityId(selectedItemId)
+				setWaterDeepId(selectedItemIdWaterDeep)
 			};
-
-			const handleSetCapacityId = (selectedItemId) => {
-				setCapacityId(selectedItemId)
-			}
 
 			const addInfo = () => { //spojení se serverem -> přidání záznamu
 				const latitude = position.lat
@@ -62,9 +60,8 @@ function Button() {
 					name: getName,
 					latitude: latitude,
 					longitude: longitude,
-					capacity: capacityId
-					/*category_id: isChecked,
-					waterDeep: waterDeep,*/
+					capacity: capacityId,
+					waterDeep: waterDeepId
 				}).then(() => console.log("úspěch"))
 			}
 

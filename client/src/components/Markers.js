@@ -6,6 +6,7 @@ import "./Markers.css"
 import GetAnchorage from "./getInfo/GetAnchorage"
 import Getbuoy from "./getInfo/GetBuoy"
 import GetCityDock from "./getInfo/GetCityDock"
+import GetMarina from "./getInfo/GetMarina"
 
 function Markers() {
 	return (
@@ -13,6 +14,7 @@ function Markers() {
 			<GetAnchorage />
 			<Getbuoy />
 			<GetCityDock />
+			<GetMarina />
 		</div>
 	)
 }

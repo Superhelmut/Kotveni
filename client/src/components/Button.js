@@ -50,9 +50,6 @@ function Button() {
 			const [bottomId, setBottomId] = useState()
 			const [equipmentId, setEquipmentId] = useState()
 
-			console.log(equipmentId,"equ")
-			console.log(bottomId,"bott")
-
 			const handleSetAnchorage = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdBottom) => { // definovat callback funkci
 				setGetName(name); // aktualizovat stav selectedItemId
 				setCapacityId(selectedItemId)
@@ -76,6 +73,15 @@ function Button() {
 				setWindId(selectedItemIdWind)
 				setEquipmentId(selectedItemIdCityDock)
 			};
+
+			const handleSetMarina = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdCityDock) => { // definovat callback funkci
+				setGetName(name); // aktualizovat stav selectedItemId
+				setCapacityId(selectedItemId)
+				setWaterDeepId(selectedItemIdWaterDeep)
+				setWindId(selectedItemIdWind)
+				setEquipmentId(selectedItemIdCityDock)
+			};
+
 
 
 			const addInfo = () => { //spojení se serverem -> přidání záznamu
@@ -114,6 +120,18 @@ function Button() {
 						equipment: equipmentId
 					}).then(() => console.log("úspěch"))
 				}
+				else if (showMaker == 4) {
+					Axios.post("http://localhost:3001/createMarina", {
+						name: getName,
+						latitude: latitude,
+						longitude: longitude,
+						capacity: capacityId,
+						waterDeep: waterDeepId,
+						wind: windId,
+						equipment: equipmentId
+					}).then(() => console.log("úspěch"))
+				}
+
 
 			}
 
@@ -144,7 +162,7 @@ function Button() {
 						{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
 						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy}/>}
 						{showMaker == 3 && <CityDock onCityDock={handleSetCityDock}/>}
-						{showMaker == 4 && <Marina />}
+						{showMaker == 4 && <Marina  onMarina={handleSetMarina}/>}
 
 						<button onClick={addInfo}>Přidat info</button>
 

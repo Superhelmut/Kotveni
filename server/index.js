@@ -168,6 +168,59 @@ app.post('/createCityDock', (reg, res) => { //přidání záznamu do tabulky anc
 
 })
 
+app.post('/createMarina', (reg, res) => { //přidání záznamu do tabulky anchorage
+	const name = reg.body.name
+	const latitude = reg.body.latitude
+	const longitude = reg.body.longitude
+	const capacity_id = reg.body.capacity
+	const water_deep_id = reg.body.waterDeep
+	const wind_id = reg.body.wind
+	const equipment_id = reg.body.equipment
+
+
+	db.query(
+		'INSERT INTO marina (name, latitude, longitude, capacity_id, water_deep_id) VALUES (?, ?, ?, ?, ?)',
+		[name, latitude, longitude, capacity_id, water_deep_id],
+		(err, result) => {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				const marinaId = result.insertId; //získání ID nového záznamu v tabulce anchorage
+
+				const valuesWind = wind_id.map((id) => [marinaId, id]); //vytvoření pole hodnot pro vkládání do tabulky anchorage_wind
+				const valuesEquipment = equipment_id.map((id) => [marinaId, id])
+				db.query(
+					'INSERT INTO marina_wind (marina_id, wind_id) VALUES ?',
+					[valuesWind],
+					(err, result) => {
+						if (err) {
+							console.log(err);
+						} else {
+							res.end("Data odeslána");
+						}
+					}
+				);
+
+				db.query(
+					'INSERT INTO marina_equipment (marina_id, equipment_id) VALUES ?',
+					[valuesEquipment],
+					(err, result) => {
+						if (err) {
+							console.log(err);
+						} else {
+							res.end("Data odeslána");
+						}
+					}
+				);
+			}
+		}
+
+	)
+
+})
+
+
 app.get('/kot', (reg, res) => {
 	db.query(
 		'SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(wind.wind) AS wind, GROUP_CONCAT(bottom.bottom) AS bottom ' +
@@ -239,6 +292,31 @@ app.get('/cityDock', (reg, res) => {
 		}
 	)
 })
+
+app.get('/marina', (reg, res) => {
+	db.query(
+		'SELECT marina.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(wind.wind) AS wind, GROUP_CONCAT(equipment.equipment) AS equipment ' +
+		'FROM marina ' +
+		'JOIN capacity ON marina.capacity_id = capacity.id ' +
+		'JOIN water_deep ON marina.water_deep_id = water_deep.id ' +
+		'LEFT JOIN marina_wind ON marina.id = marina_wind.marina_id ' +
+		'LEFT JOIN marina_equipment ON marina.id = marina_equipment.marina_id ' +
+		'LEFT JOIN equipment ON equipment.id = marina_equipment.equipment_id ' +
+		'LEFT JOIN wind ON wind.id = marina_wind.wind_id ' +
+		'GROUP BY marina.id',
+
+		(err, result) => {
+			if (err) {
+				console.log(err)
+			}
+			else {
+				res.send(result)
+				console.log("data")
+			}
+		}
+	)
+})
+
 
 
 

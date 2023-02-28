@@ -15,13 +15,33 @@ function Markers() {
 
 	const getInfo = () => { //vytvoření spojení s databází, ze ktré získáme data
 		Axios.get("http://localhost:3001/kot").then((response) => {
-			setList(response.data)
-			console.log(response.data)
+			const anchorageData = response.data;
+			const anchorageMap = new Map();
+			anchorageData.forEach((anchorage) => {
+				if (!anchorageMap.has(anchorage.id)) {
+					anchorageMap.set(anchorage.id, {
+						id: anchorage.id,
+						name: anchorage.name,
+						latitude: anchorage.latitude,
+						longitude: anchorage.longitude,
+						winds: [anchorage.wind],
+						capacity: anchorage.capacity,
+						waterDeep: anchorage.waterDeep,
+					});
+				} else {
+					let currAnchorage = anchorageMap.get(anchorage.id);
+					currAnchorage.winds.push(anchorage.wind);
+					anchorageMap.set(anchorage.id, currAnchorage);
+				}
+			})
+			const uniqueAnchorageData = Array.from(anchorageMap.values());
+			setList(uniqueAnchorageData);
+			console.log(uniqueAnchorageData, "uniq");
 		})
 	}
 
 	const updateMarker = (id, latitude, longitude) => { //databázové spojení pro aktualizaci dat
-		Axios.put("http://localhost:3001/update", { name: name, id: id, latitude: latitude, longitude: longitude}).then((response) => {
+		Axios.put("http://localhost:3001/update", { name: name, id: id, latitude: latitude, longitude: longitude }).then((response) => {
 			setList(
 				list.map((val) => {
 					return val.id == id
@@ -57,7 +77,6 @@ function Markers() {
 	return (
 		<div>
 			{list.map((val) => ( // získáme data z databáze, které vypíšeme do marker->popup
-
 				<Marker key={val.id} position={[val.latitude, val.longitude]}>
 					<Popup>
 						<h1>{val.name} </h1>
@@ -72,7 +91,13 @@ function Markers() {
 						<h2>{val.capacity}</h2>
 						<label>Water deep</label>
 						<h2>{val.waterDeep}</h2>
-
+						<label>Wind</label>
+						<ul>
+							{val.winds.map((wind) => (
+								<li key={wind}>{wind}</li>
+							))}
+						</ul>
+						{console.log(val, "val")}
 						<button onClick={() => deleteMarker(val.id)}>Smazat</button>
 					</Popup>
 				</Marker>

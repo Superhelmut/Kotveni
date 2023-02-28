@@ -40,7 +40,14 @@ app.post('/create', (reg, res) => { //přidání záznamu
 })
 
 app.get('/kot', (reg, res) => { //čtení záznamu
-	db.query('SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep FROM anchorage JOIN capacity ON anchorage.capacity_id = capacity.id JOIN water_deep ON anchorage.water_deep_id = water_deep.id',
+	db.query(
+		'SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(wind.wind) AS wind ' +
+		'FROM anchorage ' +
+		'JOIN capacity ON anchorage.capacity_id = capacity.id ' +
+		'JOIN water_deep ON anchorage.water_deep_id = water_deep.id ' +
+		'LEFT JOIN anchorage_wind ON anchorage.id = anchorage_wind.anchorage_id ' +
+		'LEFT JOIN wind ON wind.id = anchorage_wind.wind_id ' +
+		'GROUP BY anchorage.id',
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -52,6 +59,7 @@ app.get('/kot', (reg, res) => { //čtení záznamu
 		}
 	)
 })
+
 
 
 app.get('/deep', (reg, res) => { //čtení záznamu

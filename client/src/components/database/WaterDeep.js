@@ -4,7 +4,7 @@ import Axios from "axios"
 
 const WaterDeep = (props) => {
 
-	const [waterDeep, setwaterDeep] = useState(10)
+	const [waterDeep, setwaterDeep] = useState(props.waterDeep)
 	const [maxwaterDeep, setMaxwaterDeep] = useState()
 	const [minwaterDeep, setMinwaterDeep] = useState()
 	const [selectedItemWaterDeepIdDeep, setSelectedItemWaterDeepId] = useState();

@@ -4,7 +4,7 @@ import Axios from "axios"
 
 const Capacity = (props) => {
 
-	const [capacity, setCapacity] = useState(100)
+	const [capacity, setCapacity] = useState(props.capacity)
 	const [maxCapacity, setMaxCapacity] = useState()
 	const [minCapacity, setMinCapacity] = useState()
 	const [selectedItemId, setSelectedItemId] = useState();

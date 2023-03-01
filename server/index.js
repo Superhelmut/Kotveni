@@ -359,7 +359,7 @@ app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
 	const waterDeep = req.body.waterDeep
 	const bottom = req.body.bottom
 
-	db.query('UPDATE anchorage SET name = ?, latitude =?, longitude = ?, capacity_id = ?, water_deep_id = ? WHERE id = ?', [name,  latitude, longitude, capacity, waterDeep, id], (err, result) => {
+	db.query('UPDATE anchorage SET name = ?, latitude =?, longitude = ?, capacity_id = ?, water_deep_id = ? WHERE id = ?', [name, latitude, longitude, capacity, waterDeep, id], (err, result) => {
 		if (err) {
 			console.log(err)
 		}
@@ -434,20 +434,38 @@ app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
 			})
 		}
 	})
-})		
-										
+})
 
 
-app.delete("/delete/:id", (req, res) => { //smazání záznamu
+
+app.delete("/delete/:id", (req, res) => {
 	const id = req.params.id;
-	db.query("DELETE FROM anchorage WHERE id = ?", id, (err, result) => {
+	db.query("DELETE FROM anchorage_bottom WHERE anchorage_id = ?", id, (err, result) => {
 		if (err) {
 			console.log(err);
+			res.status(500).send("An error occurred while deleting anchorage_bottom");
 		} else {
-			res.send(result);
+			db.query("DELETE FROM anchorage_wind WHERE anchorage_id = ?", id, (err, result) => {
+				if (err) {
+					console.log(err);
+					res.status(500).send("An error occurred while deleting anchorage_wind");
+				} else {
+					db.query("DELETE FROM anchorage WHERE id = ?", id, (err, result) => {
+						if (err) {
+							console.log(err);
+							res.status(500).send("An error occurred while deleting anchorage");
+						} else {
+							res.send("Anchorage and related records deleted successfully");
+						}
+					})
+				}
+			})
 		}
-	});
-});
+	})
+})
+
+
+
 
 app.listen(3001, () => {
 	console.log("tvůj server běží na portu 3001 ")

@@ -9,7 +9,7 @@ import Bottom from '../database/Bottom';
 
 const GetAnchorage = () => {
 	const [list, setList] = useState([]);
-	const [name, setName] = useState(0);
+	const [name, setName] = useState("");
 	const [show, setShow] = useState(1)
 	const [selectedItemIdCapacity, setSelectedItemIdCapacity] = useState("");
 	const [selectedItemIdWaterDeep, setSelectedItemIdWaterDeep] = useState("")
@@ -49,26 +49,29 @@ const GetAnchorage = () => {
 						bottom: [anchorage.bottom],
 						capacity: anchorage.capacity,
 						waterDeep: anchorage.waterDeep,
-						windId: [anchorage.wind_id]
+						windId: [anchorage.wind_id],
+						bottomId: [anchorage.bottom_id],
 					});
 				} else {
 					let currAnchorage = anchorageMap.get(anchorage.id);
 					currAnchorage.winds.push(anchorage.wind); // přidává wind hodnotu					
 					currAnchorage.bottom.push(anchorage.bottom)
-					currAnchorage.windId.push(anchorage.wind_id); // přidává wind_id hodnotu					
+					currAnchorage.windId.push(anchorage.wind_id); // přidává wind_id hodnotu	
+					currAnchorage.bottomId.push(anchorage.bottom_id); // přidává bottom_id hodnotu					
+
 
 					anchorageMap.set(anchorage.id, currAnchorage);
 				}
 			})
 			const uniqueAnchorageData = Array.from(anchorageMap.values());
 			setList(uniqueAnchorageData);
-
-			console.log(uniqueAnchorageData, "data")
+			const name = uniqueAnchorageData[0].name;
+			setName(name);
 		})
 	}
 
 	const updateMarker = (id, latitude, longitude) => { //databázové spojení pro aktualizaci dat
-		Axios.put("http://localhost:3001/update", { name: name, id: id, latitude: latitude, longitude: longitude }).then((response) => {
+		Axios.put("http://localhost:3001/updateAnchorage", { name: name, id: id, latitude: latitude, longitude: longitude, capacity: selectedItemIdCapacity, wind: selectedItemIdWind, waterDeep: selectedItemIdWaterDeep, bottom: selectedItemIdBottom }).then((response) => {
 			setList(
 				list.map((val) => {
 					return val.id == id
@@ -76,7 +79,11 @@ const GetAnchorage = () => {
 							id: val.id,
 							name: name,
 							latitude: val.latitude,
-							longitude: val.longitude
+							longitude: val.longitude,
+							capacity: selectedItemIdCapacity,
+							wind: selectedItemIdWind,
+							waterDeep: selectedItemIdWaterDeep,
+							bottom: selectedItemIdBottom
 						}
 						: val;
 				})
@@ -100,11 +107,13 @@ const GetAnchorage = () => {
 	}, [])
 
 
+
+
 	return (
 		<div>
 			{list.map((val) => ( // získáme data z databáze, které vypíšeme do marker->popup
 
-				<Marker key={val.id} position={[val.latitude, val.longitude]}>
+				<Marker key={val.id} position={[val.latitude, val.longitude]} autoOpenPopup={true}>
 					<Popup>
 						{show == 1 &&
 							<div>
@@ -130,7 +139,7 @@ const GetAnchorage = () => {
 						{show == 2 &&
 							<div>
 								<h2>Update name</h2>
-								<input type="text" onChange={(event) => setName(event.target.value)} />
+								<input type="text" value={name} onChange={(event) => setName(event.target.value)} />
 								<h2>Update capacity</h2>
 								<Capacity capacity={val.capacity} onSelectedItemIdCapacity={handleSelectedItemIdCapacity} />
 								<h2>Update water deep</h2>
@@ -138,7 +147,7 @@ const GetAnchorage = () => {
 								<h2>Update wind</h2>
 								<Wind wind={Array.isArray(val.windId) ? val.windId[0].split(",") : []} onSelectedItemIdWind={handleSelectedItemIdWind} />
 								<h2>Update bottom</h2>
-								<Bottom onSelectedItemIdBottom={handleSelectedItemIdBottom} />
+								<Bottom bottom={Array.isArray(val.bottomId) ? val.bottomId[0].split(",") : []} onSelectedItemIdBottom={handleSelectedItemIdBottom} />
 
 								<button onClick={() => {
 									updateMarker(val.id)

@@ -223,7 +223,7 @@ app.post('/createMarina', (reg, res) => { //přidání záznamu do tabulky ancho
 
 app.get('/kot', (reg, res) => {
 	db.query(
-		'SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(DISTINCT anchorage_wind.wind_id) AS wind_id, GROUP_CONCAT(wind.wind) AS wind, GROUP_CONCAT(bottom.bottom) AS bottom ' +
+		'SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(DISTINCT anchorage_wind.wind_id) AS wind_id, GROUP_CONCAT(DISTINCT anchorage_bottom.bottom_id) AS bottom_id, GROUP_CONCAT(wind.wind) AS wind, GROUP_CONCAT(bottom.bottom) AS bottom ' +
 		'FROM anchorage ' +
 		'JOIN capacity ON anchorage.capacity_id = capacity.id ' +
 		'JOIN water_deep ON anchorage.water_deep_id = water_deep.id ' +
@@ -349,20 +349,94 @@ app.get('/capacity', (reg, res) => { //čtení záznamu
 	)
 })
 
-app.put('/update', (reg, res) => { //aktualizace záznamu
-	const id = reg.body.id
-	const name = reg.body.name
-	const latitude = reg.body.latitude
-	const longitude = reg.body.longitude
-	db.query('UPDATE anchorage SET name = ? WHERE id = ?', [name, id], (err, result) => {
+app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
+	const id = req.body.id
+	const name = req.body.name
+	const latitude = req.body.latitude
+	const longitude = req.body.longitude
+	const capacity = req.body.capacity
+	const wind = req.body.wind
+	const waterDeep = req.body.waterDeep
+	const bottom = req.body.bottom
+
+	db.query('UPDATE anchorage SET name = ?, latitude = ?, longitude = ?, capacity_id = ?, water_deep_id = ? WHERE id = ?', [name, latitude, longitude, capacity, waterDeep, id], (err, result) => {
 		if (err) {
 			console.log(err)
 		}
 		else {
-			res.send(result)
+			db.query('DELETE FROM anchorage_wind WHERE anchorage_id = ?', [id], (err, result) => { // odstranění všech záznamů pro spojení m:n
+				if (err) {
+					console.log(err)
+					res.send("Error updating anchorage")
+				}
+				else {
+					db.query('DELETE FROM anchorage_bottom WHERE anchorage_id = ?', [id], (err, result) => { // odstranění všech záznamů pro spojení m:n
+						if (err) {
+							console.log(err)
+							res.send("Error updating anchorage")
+						}
+						else {
+							if (wind.length > 0) { // kontrola pro prázdné pole
+								let wind_values = []
+								wind.forEach((element) => {
+									wind_values.push([id, element])
+								})
+								db.query('INSERT INTO anchorage_wind (anchorage_id, wind_id) VALUES ?', [wind_values], (err, result) => { // vložení nových záznamů pro spojení m:n
+									if (err) {
+										console.log(err)
+										res.send("Error updating anchorage")
+									}
+									else {
+										if (bottom.length > 0) { // kontrola pro prázdné pole
+											let bottom_values = []
+											bottom.forEach((element) => {
+												bottom_values.push([id, element])
+											})
+											db.query('INSERT INTO anchorage_bottom (anchorage_id, bottom_id) VALUES ?', [bottom_values], (err, result) => { // vložení nových záznamů pro spojení m:n
+												if (err) {
+													console.log(err)
+													res.send("Error updating anchorage")
+												}
+												else {
+													res.send("Anchorage updated successfully")
+												}
+											})
+										}
+										else {
+											res.send("Anchorage updated successfully")
+										}
+									}
+								})
+							}
+							else {
+								if (bottom.length > 0) { // kontrola pro prázdné pole
+									let bottom_values = []
+									bottom.forEach((element) => {
+										bottom_values.push([id, element])
+									})
+									db.query('INSERT INTO anchorage_bottom (anchorage_id, bottom_id VALUES ?', [bottom_values], (err, result) => { // vložení nových záznamů pro spojení m:n
+										if (err) {
+											console.log(err)
+											res.send("Error updating anchorage")
+										}
+										else {
+											res.send("Anchorage updated successfully")
+										}
+									})
+								}
+								else {
+									res.send("Anchorage updated successfully")
+								}
+							}
+						}
+					})
+				}
+			})
 		}
 	})
-})
+})		
+										
+
 
 app.delete("/delete/:id", (req, res) => { //smazání záznamu
 	const id = req.params.id;

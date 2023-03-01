@@ -15,6 +15,8 @@ const GetAnchorage = () => {
 	const [selectedItemIdWaterDeep, setSelectedItemIdWaterDeep] = useState("")
 	const [selectedItemIdWind, setSelectedItemIdWind] = useState("")
 	const [selectedItemIdBottom, setSelectedItemIdBottom] = useState("")
+	const [latitudeData, setLatitudeData] = useState()
+	const [longitudeData, setLongitudeData] = useState()
 
 
 	const handleSelectedItemIdCapacity = (id) => { // definovat callback funkci
@@ -66,20 +68,21 @@ const GetAnchorage = () => {
 			const uniqueAnchorageData = Array.from(anchorageMap.values());
 			setList(uniqueAnchorageData);
 			const name = uniqueAnchorageData[0].name;
+			setLatitudeData(uniqueAnchorageData[0].latitude)
+			setLongitudeData(uniqueAnchorageData[0].longitude)
 			setName(name);
 		})
 	}
-
-	const updateMarker = (id, latitude, longitude) => { //databázové spojení pro aktualizaci dat
-		Axios.put("http://localhost:3001/updateAnchorage", { name: name, id: id, latitude: latitude, longitude: longitude, capacity: selectedItemIdCapacity, wind: selectedItemIdWind, waterDeep: selectedItemIdWaterDeep, bottom: selectedItemIdBottom }).then((response) => {
+	const updateMarker = (id) => { //databázové spojení pro aktualizaci dat
+		Axios.put("http://localhost:3001/updateAnchorage", { name: name, id: id, latitude: latitudeData, longitude: longitudeData, capacity: selectedItemIdCapacity, wind: selectedItemIdWind, waterDeep: selectedItemIdWaterDeep, bottom: selectedItemIdBottom }).then((response) => {
 			setList(
 				list.map((val) => {
 					return val.id == id
 						? {
 							id: val.id,
 							name: name,
-							latitude: val.latitude,
-							longitude: val.longitude,
+							latitude: latitudeData,
+							longitude: longitudeData,
 							capacity: selectedItemIdCapacity,
 							wind: selectedItemIdWind,
 							waterDeep: selectedItemIdWaterDeep,

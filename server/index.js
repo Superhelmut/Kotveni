@@ -359,7 +359,7 @@ app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
 	const waterDeep = req.body.waterDeep
 	const bottom = req.body.bottom
 
-	db.query('UPDATE anchorage SET name = ?, latitude = ?, longitude = ?, capacity_id = ?, water_deep_id = ? WHERE id = ?', [name, latitude, longitude, capacity, waterDeep, id], (err, result) => {
+	db.query('UPDATE anchorage SET name = ?, latitude =?, longitude = ?, capacity_id = ?, water_deep_id = ? WHERE id = ?', [name,  latitude, longitude, capacity, waterDeep, id], (err, result) => {
 		if (err) {
 			console.log(err)
 		}
@@ -367,13 +367,13 @@ app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
 			db.query('DELETE FROM anchorage_wind WHERE anchorage_id = ?', [id], (err, result) => { // odstranění všech záznamů pro spojení m:n
 				if (err) {
 					console.log(err)
-					res.send("Error updating anchorage")
+					res.end("Error updating anchorage")
 				}
 				else {
 					db.query('DELETE FROM anchorage_bottom WHERE anchorage_id = ?', [id], (err, result) => { // odstranění všech záznamů pro spojení m:n
 						if (err) {
 							console.log(err)
-							res.send("Error updating anchorage")
+							res.end("Error updating anchorage")
 						}
 						else {
 							if (wind.length > 0) { // kontrola pro prázdné pole
@@ -384,7 +384,7 @@ app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
 								db.query('INSERT INTO anchorage_wind (anchorage_id, wind_id) VALUES ?', [wind_values], (err, result) => { // vložení nových záznamů pro spojení m:n
 									if (err) {
 										console.log(err)
-										res.send("Error updating anchorage")
+										res.end("Error updating anchorage")
 									}
 									else {
 										if (bottom.length > 0) { // kontrola pro prázdné pole
@@ -395,15 +395,15 @@ app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
 											db.query('INSERT INTO anchorage_bottom (anchorage_id, bottom_id) VALUES ?', [bottom_values], (err, result) => { // vložení nových záznamů pro spojení m:n
 												if (err) {
 													console.log(err)
-													res.send("Error updating anchorage")
+													res.end("Error updating anchorage")
 												}
 												else {
-													res.send("Anchorage updated successfully")
+													res.end("Anchorage updated successfully")
 												}
 											})
 										}
 										else {
-											res.send("Anchorage updated successfully")
+											res.end("Anchorage updated successfully")
 										}
 									}
 								})
@@ -417,15 +417,15 @@ app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
 									db.query('INSERT INTO anchorage_bottom (anchorage_id, bottom_id VALUES ?', [bottom_values], (err, result) => { // vložení nových záznamů pro spojení m:n
 										if (err) {
 											console.log(err)
-											res.send("Error updating anchorage")
+											res.end("Error updating anchorage")
 										}
 										else {
-											res.send("Anchorage updated successfully")
+											res.end("Anchorage updated successfully")
 										}
 									})
 								}
 								else {
-									res.send("Anchorage updated successfully")
+									res.end("Anchorage updated successfully")
 								}
 							}
 						}

@@ -19,7 +19,6 @@ const WaterDeep = (props) => {
 			const minwaterDeep = Math.min(...waterDeepValues);
 			setMaxwaterDeep(maxwaterDeep);
 			setMinwaterDeep(minwaterDeep);
-			console.log("water",waterDeepValues)
 			
 		} catch (error) {
 			console.error(error);

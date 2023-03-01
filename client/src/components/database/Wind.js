@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 
 const Wind = (props) => {
 	const [isChecked, setIsChecked] = useState(props.wind ? props.wind : []);
-	console.log("props", isChecked)
 
 	const handleCheckboxChange = (event) => {
 		const value = event.target.value;

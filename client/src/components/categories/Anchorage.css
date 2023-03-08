@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: solid 1px black;
+  width: 47vw;
 }
 
 .row {
@@ -13,11 +15,20 @@
 
 .col {
   flex: 1 1 30%;
-  margin: 0 1%;
+  margin: 10px;
 }
 
 .wind, .bottom {
   margin-top: 20px;
   background-color: #eee;
   padding: 20px;
+}
+
+h1{
+  padding-bottom: 10px;
+  
+}
+
+label{
+  padding-right: 10px;
 }

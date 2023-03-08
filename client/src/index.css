@@ -2,6 +2,17 @@
   padding: 0px;
   margin: 0px;
 }
-.leaflet-container{
+
+.leaflet-container {
   height: 100vh
+}
+
+.leaflet-popup {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  width: 50vw;
+  height: 80vh;
 }

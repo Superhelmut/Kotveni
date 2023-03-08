@@ -66,12 +66,10 @@ function Button() {
 				setBottomId(selectedItemIdBottom)
 			};
 
-			const handleSetBuoy = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdBottom) => { // definovat callback funkci
+			const handleSetBuoy = (name, selectedItemId, selectedItemIdWind) => { // definovat callback funkci
 				setGetName(name); // aktualizovat stav selectedItemId
 				setCapacityId(selectedItemId)
-				setWaterDeepId(selectedItemIdWaterDeep)
 				setWindId(selectedItemIdWind)
-				setBottomId(selectedItemIdBottom)
 			};
 
 			const handleSetCityDock = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdCityDock) => { // definovat callback funkci
@@ -112,9 +110,7 @@ function Button() {
 						latitude: latitude,
 						longitude: longitude,
 						capacity: capacityId,
-						waterDeep: waterDeepId,
 						wind: windId,
-						bottom: bottomId
 					}).then(() => console.log("úspěch"))
 				}
 				else if (showMaker == 3) {

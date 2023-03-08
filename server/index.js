@@ -70,13 +70,10 @@ app.post('/createBuoy', (reg, res) => { //přidání záznamu do tabulky anchora
 	const latitude = reg.body.latitude
 	const longitude = reg.body.longitude
 	const capacity_id = reg.body.capacity
-	const water_deep_id = reg.body.waterDeep
 	const wind_id = reg.body.wind
-	const bottom_id = reg.body.bottom
-
-	db.query(
-		'INSERT INTO buoy (name, latitude, longitude, capacity_id, water_deep_id) VALUES (?, ?, ?, ?, ?)',
-		[name, latitude, longitude, capacity_id, water_deep_id],
+	console.log(wind_id,"wind")
+	db.query('INSERT INTO buoy (name, latitude, longitude, capacity_id ) VALUES (?, ?, ?, ?)',
+		[name, latitude, longitude, capacity_id],
 		(err, result) => {
 			if (err) {
 				console.log(err)
@@ -85,9 +82,8 @@ app.post('/createBuoy', (reg, res) => { //přidání záznamu do tabulky anchora
 				const buoy_id = result.insertId; //získání ID nového záznamu v tabulce anchorage
 
 				const valuesWind = wind_id.map((id) => [buoy_id, id]); //vytvoření pole hodnot pro vkládání do tabulky anchorage_wind
-				const valuesBottom = bottom_id.map((id) => [buoy_id, id])
-				db.query(
-					'INSERT INTO buoy_wind (buoy_id, wind_id) VALUES ?',
+
+				db.query('INSERT INTO buoy_wind (buoy_id, wind_id) VALUES ?',
 					[valuesWind],
 					(err, result) => {
 						if (err) {
@@ -98,17 +94,7 @@ app.post('/createBuoy', (reg, res) => { //přidání záznamu do tabulky anchora
 					}
 				);
 
-				db.query(
-					'INSERT INTO buoy_bottom (buoy_id, bottom_id) VALUES ?',
-					[valuesBottom],
-					(err, result) => {
-						if (err) {
-							console.log(err);
-						} else {
-							res.end("Data odeslána");
-						}
-					}
-				);
+
 			}
 		}
 
@@ -247,13 +233,10 @@ app.get('/kot', (reg, res) => {
 
 app.get('/buoy', (reg, res) => {
 	db.query(
-		'SELECT buoy.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(wind.wind) AS wind, GROUP_CONCAT(bottom.bottom) AS bottom ' +
+		'SELECT buoy.*, capacity.capacity AS capacity, GROUP_CONCAT(DISTINCT buoy_wind.wind_id) AS wind_id, GROUP_CONCAT(wind.wind) AS wind ' +
 		'FROM buoy ' +
 		'JOIN capacity ON buoy.capacity_id = capacity.id ' +
-		'JOIN water_deep ON buoy.water_deep_id = water_deep.id ' +
 		'LEFT JOIN buoy_wind ON buoy.id = buoy_wind.buoy_id ' +
-		'LEFT JOIN buoy_bottom ON buoy.id = buoy_bottom.buoy_id ' +
-		'LEFT JOIN bottom ON bottom.id = buoy_bottom.bottom_id ' +
 		'LEFT JOIN wind ON wind.id = buoy_wind.wind_id ' +
 		'GROUP BY buoy.id',
 
@@ -436,9 +419,68 @@ app.put('/updateAnchorage', (req, res) => { //aktualizace záznamu
 	})
 })
 
+app.put('/updateBuoy', (req, res) => { //aktualizace záznamu
+	const id = req.body.id
+	const name = req.body.name
+	const latitude = req.body.latitude
+	const longitude = req.body.longitude
+	const capacity = req.body.capacity
+	const wind = req.body.wind
+
+	db.query('UPDATE buoy SET name = ?, latitude =?, longitude = ?, capacity_id = ? WHERE id = ?', [name, latitude, longitude, capacity, id], (err, result) => {
+		if (err) {
+			console.log(err)
+		}
+		else {
+			db.query('DELETE FROM buoy_wind WHERE buoy_id = ?', [id], (err, result) => { // odstranění všech záznamů pro spojení m:n
+				if (err) {
+					console.log(err)
+					res.end("Error updating buoy")
+				}
+				else {
+					if (wind.length > 0) { // kontrola pro prázdné pole
+						let wind_values = []
+						wind.forEach((element) => {
+							wind_values.push([id, element])
+						})
+						db.query('INSERT INTO buoy_wind (buoy_id, wind_id) VALUES ?', [wind_values], (err, result) => { // vložení nových záznamů pro spojení m:n
+							if (err) {
+								console.log(err)
+								res.end("Error updating buoy")
+							}
+						})
+					}
+					else {
+						if (bottom.length > 0) { // kontrola pro prázdné pole
+							let bottom_values = []
+							bottom.forEach((element) => {
+								bottom_values.push([id, element])
+							})
+							db.query('INSERT INTO buoy_bottom (buoy_id, bottom_id VALUES ?', [bottom_values], (err, result) => { // vložení nových záznamů pro spojení m:n
+								if (err) {
+									console.log(err)
+									res.end("Error updating buoy")
+								}
+								else {
+									res.end("Buoy updated successfully")
+								}
+							})
+						}
+						else {
+							res.end("Buoy updated successfully")
+						}
+					}
+				}
+			})
+		}
+	})
+}
+)
 
 
-app.delete("/delete/:id", (req, res) => {
+
+
+app.delete("/deleteAnchorage/:id", (req, res) => {
 	const id = req.params.id;
 	db.query("DELETE FROM anchorage_bottom WHERE anchorage_id = ?", id, (err, result) => {
 		if (err) {
@@ -463,6 +505,27 @@ app.delete("/delete/:id", (req, res) => {
 		}
 	})
 })
+
+app.delete("/deleteBuoy/:id", (req, res) => {
+	const id = req.params.id;
+	db.query("DELETE FROM buoy_wind WHERE buoy_id = ?", id, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).send("An error occurred while deleting buoy_wind");
+		} else {
+			db.query("DELETE FROM buoy WHERE id = ?", id, (err, result) => {
+				if (err) {
+					console.log(err);
+					res.status(500).send("An error occurred while deleting buoy");
+				} else {
+					res.send("Buoy and related records deleted successfully");
+				}
+			})
+		}
+	})
+}
+)
+
 
 
 

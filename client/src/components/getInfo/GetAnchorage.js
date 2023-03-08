@@ -102,9 +102,8 @@ const GetAnchorage = () => {
 			)
 		})
 	}
-
 	const deleteMarker = (id) => { //smazání záznamu z databáze -> spojení s databází
-		Axios.delete(`http://localhost:3001/delete/${id}`).then((response) => {
+		Axios.delete(`http://localhost:3001/deleteAnchorage/${id}`).then((response) => {
 			setList(
 				list.filter((val) => {
 					return val.id != id;

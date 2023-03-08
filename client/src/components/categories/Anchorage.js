@@ -1,5 +1,5 @@
 import "./Anchorage.css"
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import WaterDeep from "../database/WaterDeep";
 import Capacity from "../database/Capacity";
 import Wind from "../database/Wind";

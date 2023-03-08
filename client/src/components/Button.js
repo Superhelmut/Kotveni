@@ -12,11 +12,19 @@ import Anchorage from './categories/Anchorage';
 import Buoy from './categories/Buoy';
 import CityDock from "./categories/CityDock";
 import Marina from './categories/Marina';
+import L from 'leaflet';
+import icon from '../../node_modules/leaflet/dist/images/clear.png';
+
 
 
 function Button() {
 	const [showCategory, setShowCategory] = useState(false); //po kliknutí na tlačítko přidat zobrazí kategorie
 	const [showMaker, setShowMaker] = useState()
+	const defaultIcon = L.icon({
+		iconUrl: icon,
+		iconSize: [25, 35],
+	});
+
 
 	const CustomControl = ({ position }) => {
 		const buttonRef = useRef(null);
@@ -157,13 +165,14 @@ function Button() {
 				draggable={draggable}
 				eventHandlers={eventHandlers}
 				ref={markerRef}
-				autoOpenPopup={true}>
+				autoOpenPopup={true}
+				icon={defaultIcon}>
 				<div className='popup'>
 					<Popup autoPan={true}>
 						{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
-						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy}/>}
-						{showMaker == 3 && <CityDock onCityDock={handleSetCityDock}/>}
-						{showMaker == 4 && <Marina  onMarina={handleSetMarina}/>}
+						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy} />}
+						{showMaker == 3 && <CityDock onCityDock={handleSetCityDock} />}
+						{showMaker == 4 && <Marina onMarina={handleSetMarina} />}
 
 						<button onClick={addInfo}>Přidat info</button>
 

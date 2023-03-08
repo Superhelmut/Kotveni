@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Marker, Popup } from 'react-leaflet'
 import Axios from "axios"
+import L from 'leaflet';
+import icon from '../../../node_modules/leaflet/dist/images/buoy_min.png';
+
 
 
 const Getbuoy = () => {
 	const [list, setList] = useState([]);
 	const [name, setName] = useState(0);
 
+	const defaultIcon = L.icon({
+		iconUrl: icon,
+		iconSize: [25, 35],
+	});
 
 
 	const getInfo = () => { //vytvoření spojení s databází, ze ktré získáme data
@@ -73,7 +80,7 @@ const Getbuoy = () => {
 	return (
 		<div>
 			{list.map((val) => ( // získáme data z databáze, které vypíšeme do marker->popup
-				<Marker key={val.id} position={[val.latitude, val.longitude]}>
+				<Marker key={val.id} position={[val.latitude, val.longitude]} icon={defaultIcon}>
 					<Popup>
 						<h1>{val.name} </h1>
 						<h1>Buoy</h1>

@@ -5,6 +5,9 @@ import Capacity from '../database/Capacity';
 import WaterDeep from '../database/WaterDeep';
 import Wind from '../database/Wind';
 import Bottom from '../database/Bottom';
+import L from 'leaflet';
+import icon from '../../../node_modules/leaflet/dist/images/anchorage.png';
+
 
 
 const GetAnchorage = () => {
@@ -17,6 +20,12 @@ const GetAnchorage = () => {
 	const [selectedItemIdBottom, setSelectedItemIdBottom] = useState("")
 	const [latitudeData, setLatitudeData] = useState()
 	const [longitudeData, setLongitudeData] = useState()
+
+	const defaultIcon = L.icon({
+		iconUrl: icon,
+		iconSize: [25, 35],
+	  });
+
 
 
 	const handleSelectedItemIdCapacity = (id) => { // definovat callback funkci
@@ -116,7 +125,7 @@ const GetAnchorage = () => {
 		<div>
 			{list.map((val) => ( // získáme data z databáze, které vypíšeme do marker->popup
 
-				<Marker key={val.id} position={[val.latitude, val.longitude]} autoOpenPopup={true}>
+				<Marker key={val.id} position={[val.latitude, val.longitude]} autoOpenPopup={true} icon={defaultIcon}>
 					<Popup>
 						{show == 1 &&
 							<div>

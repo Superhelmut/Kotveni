@@ -1,8 +1,10 @@
 import './App.css';
-import { MapContainer, LayerGroup, Circle } from 'react-leaflet'
+import { MapContainer } from 'react-leaflet'
 import Maps from './components/Maps';
 import Markers from './components/Markers';
 import Button from './components/Button';
+import "../node_modules/leaflet/dist/leaflet.css"
+import "../node_modules/leaflet/dist/leaflet.js"
 
 const App = () => {
 
@@ -12,7 +14,7 @@ const App = () => {
       <MapContainer center={[44.119370, 15.231365]} zoom={12} scrollWheelZoom={true}>
         <Maps />
         <Markers />
-        <Button />
+        <Button/>
       </MapContainer>
 
     </div >

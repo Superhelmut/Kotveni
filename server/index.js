@@ -209,7 +209,7 @@ app.post('/createMarina', (reg, res) => { //přidání záznamu do tabulky ancho
 
 app.get('/kot', (reg, res) => {
 	db.query(
-		'SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(DISTINCT anchorage_wind.wind_id) AS wind_id, GROUP_CONCAT(DISTINCT anchorage_bottom.bottom_id) AS bottom_id, GROUP_CONCAT(wind.wind) AS wind, GROUP_CONCAT(bottom.bottom) AS bottom ' +
+		'SELECT anchorage.*, capacity.capacity AS capacity, water_deep.deep AS waterDeep, GROUP_CONCAT(DISTINCT anchorage_wind.wind_id) AS wind_id, GROUP_CONCAT(DISTINCT anchorage_bottom.bottom_id) AS bottom_id, GROUP_CONCAT(DISTINCT wind.wind) AS wind, GROUP_CONCAT(DISTINCT bottom.bottom) AS bottom ' +
 		'FROM anchorage ' +
 		'JOIN capacity ON anchorage.capacity_id = capacity.id ' +
 		'JOIN water_deep ON anchorage.water_deep_id = water_deep.id ' +

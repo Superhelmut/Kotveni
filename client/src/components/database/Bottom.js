@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-
 const Bottom = (props) => {
 	const [isChecked, setIsChecked] = useState(props.bottom ? props.bottom : []);
+	const { onSelectedItemIdBottom } = props;
 
 	const handleCheckboxChange = (event) => {
 		const value = event.target.value;
@@ -14,11 +14,8 @@ const Bottom = (props) => {
 	};
 
 	useEffect(() => {
-		props.onSelectedItemIdBottom(isChecked)
-
-	}, [isChecked]);
-
-	props.onSelectedItemIdBottom(isChecked)
+		onSelectedItemIdBottom(isChecked)
+	}, [isChecked, onSelectedItemIdBottom]);
 
 	return (
 		<div>

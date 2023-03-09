@@ -21,10 +21,11 @@ const GetAnchorage = () => {
 	const [latitudeData, setLatitudeData] = useState()
 	const [longitudeData, setLongitudeData] = useState()
 
+
 	const defaultIcon = L.icon({
 		iconUrl: icon,
 		iconSize: [25, 35],
-	  });
+	});
 
 
 
@@ -117,14 +118,11 @@ const GetAnchorage = () => {
 		getInfo()
 	}, [])
 
-
-
-
 	return (
 		<div>
 			{list.map((val) => ( // získáme data z databáze, které vypíšeme do marker->popup
 
-				<Marker key={val.id} position={[val.latitude, val.longitude]} autoOpenPopup={true} icon={defaultIcon}>
+				<Marker key={val.id} position={[val.latitude, val.longitude]} icon={defaultIcon}>
 					<Popup>
 						{show == 1 &&
 							<div>

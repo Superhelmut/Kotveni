@@ -4,7 +4,7 @@ Po kliknutí na tlačítko se zobrazí popup, do kterého lze zadat údaje, kter
 se odešle i pozice markeru. Marker se dá posouvat
 */
 
-import React, { useRef, useState, useCallback, useMemo, } from 'react';
+import React, { useRef, useState, useCallback, useMemo, useEffect } from 'react';
 import "./Button.css"
 import Axios from "axios"
 import { Marker, useMap, Popup } from 'react-leaflet'
@@ -57,6 +57,8 @@ function Button() {
 			const [windId, setWindId] = useState()
 			const [bottomId, setBottomId] = useState()
 			const [equipmentId, setEquipmentId] = useState()
+			const [showConfirm, setShowConfirm] = useState(false)
+
 
 			const handleSetAnchorage = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdBottom) => { // definovat callback funkci
 				setGetName(name); // aktualizovat stav selectedItemId
@@ -145,6 +147,7 @@ function Button() {
 						const marker = markerRef.current
 						if (marker != null) {
 							setPosition(marker.getLatLng())
+
 						}
 					},
 				}),
@@ -154,23 +157,29 @@ function Button() {
 				setDraggable((d) => !d)
 			}, [])
 
-			const [category, setCategory] = useState()
-
 			return <Marker //přidání markeru
 				position={position}
 				draggable={draggable}
 				eventHandlers={eventHandlers}
 				ref={markerRef}
-				autoOpenPopup={true}
 				icon={defaultIcon}>
 				<div className='popup'>
-					<Popup autoPan={true}>
+					<Popup>
 						{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
 						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy} />}
 						{showMaker == 3 && <CityDock onCityDock={handleSetCityDock} />}
 						{showMaker == 4 && <Marina onMarina={handleSetMarina} />}
 
-						<button onClick={addInfo}>Přidat info</button>
+						<button onClick={() => { setShowConfirm(true) }}>Přidat info</button>
+
+						{showConfirm == true &&
+							<div className='confirm'>
+								<h2>Are you sure?</h2>
+								<button onClick={addInfo}>Yes</button>
+								<button onClick={() => setShowConfirm(false)}>No</button>
+							</div>
+
+						}
 
 						<span onClick={toggleDraggable}>
 							{draggable

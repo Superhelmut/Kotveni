@@ -10,6 +10,7 @@ import icon from '../../../node_modules/leaflet/dist/images/anchorage.png';
 
 
 
+
 const GetAnchorage = () => {
 	const [list, setList] = useState([]);
 	const [name, setName] = useState("");

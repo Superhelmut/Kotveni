@@ -63,7 +63,6 @@ const Getbuoy = () => {
 			setLatitudeData(uniqueBuoyData[0].latitude)
 			setLongitudeData(uniqueBuoyData[0].longitude)
 			setName(name)
-			console.log(list)
 		})
 	}
 

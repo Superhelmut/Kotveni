@@ -30,17 +30,28 @@ const Capacity = (props) => {
 	}, [])
 
 	useEffect(() => {
+		// Pokud pole capacityData obsahuje alespoň jeden prvek
 		if (capacityData.length > 0) {
-			const selectedItem = capacityData.find((item) => item.capacity === capacity);
-			if (selectedItem) {
-				setSelectedItemId(selectedItem.id);
-				props.onSelectedItemIdCapacity(selectedItem.id)
-			} else {
-				setSelectedItemId(null);
-				props.onSelectedItemIdCapacity(null)
-			}
+		  // Najdi prvek v poli capacityData, jehož capacity odpovídá hodnotě proměnné capacity
+		  const selectedItem = capacityData.find((item) => item.capacity === capacity);
+	  
+		  // Pokud byl nalezen odpovídající prvek
+		  if (selectedItem) {
+			// Nastav jeho id jako novou hodnotu proměnné selectedItemId
+			setSelectedItemId(selectedItem.id);
+			// Zavolej funkci onSelectedItemIdCapacity s novou hodnotou id jako argumentem
+			props.onSelectedItemIdCapacity(selectedItem.id);
+		  } 
+		  // Pokud nebyl nalezen žádný odpovídající prvek
+		  else {
+			// Nastav hodnotu proměnné selectedItemId na null
+			setSelectedItemId(null);
+			// Zavolej funkci onSelectedItemIdCapacity s hodnotou null jako argumentem
+			props.onSelectedItemIdCapacity(null);
+		  }
 		}
-	}, [capacityData, capacity]);
+	  }, [capacityData, capacity]);
+	  
 
 
 	return (

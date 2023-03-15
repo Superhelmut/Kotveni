@@ -14,6 +14,7 @@ import CityDock from "./categories/CityDock";
 import Marina from './categories/Marina';
 import L from 'leaflet';
 import icon from '../../node_modules/leaflet/dist/images/clear.png';
+import addAnchorage from './addInfo/addAnchorage';
 
 
 
@@ -52,10 +53,10 @@ function Button() {
 			const [position, setPosition] = useState(latlng)
 			const markerRef = useRef(null)
 			const [getName, setGetName] = useState("")
-			const [capacityId, setCapacityId] = useState()
-			const [waterDeepId, setWaterDeepId] = useState()
-			const [windId, setWindId] = useState()
-			const [bottomId, setBottomId] = useState()
+			const [capacityId, setCapacityId] = useState(null)
+			const [waterDeepId, setWaterDeepId] = useState(null)
+			const [windId, setWindId] = useState(null)
+			const [bottomId, setBottomId] = useState(null)
 			const [equipmentId, setEquipmentId] = useState()
 			const [showConfirm, setShowConfirm] = useState(false)
 
@@ -90,21 +91,11 @@ function Button() {
 				setEquipmentId(selectedItemIdCityDock)
 			};
 
-
-
-			const addInfo = () => { //spojení se serverem -> přidání záznamu
+			/*const addInfo = () => { //spojení se serverem -> přidání záznamu
 				const latitude = position.lat
 				const longitude = position.lng
 				if (showMaker == 1) {
-					Axios.post("http://localhost:3001/createAnchor", {
-						name: getName,
-						latitude: latitude,
-						longitude: longitude,
-						capacity: capacityId,
-						waterDeep: waterDeepId,
-						wind: windId,
-						bottom: bottomId
-					}).then(() => console.log("úspěch"))
+					return <AddAnchorage />
 				}
 				else if (showMaker == 2) {
 					Axios.post("http://localhost:3001/createBuoy", {
@@ -138,8 +129,7 @@ function Button() {
 					}).then(() => console.log("úspěch"))
 				}
 
-
-			}
+			}*/
 
 			const eventHandlers = useMemo( //zjišťování pozice markeru při přesouvání
 				() => ({
@@ -157,6 +147,25 @@ function Button() {
 				setDraggable((d) => !d)
 			}, [])
 
+			const handleAddInfo = () => {
+				console.log(position, "position")
+				console.log(getName, "name")
+				console.log(capacityId, "capacity")
+				console.log(waterDeepId, "water")
+				console.log(windId, "wind")
+				console.log(bottomId, "bottom")
+
+				setShowConfirm(false)
+				addAnchorage({
+					position: position,
+					getName: getName,
+					capacityId: capacityId,
+					waterDeepId: waterDeepId,
+					windId: windId,
+					bottomId: bottomId
+				});
+			};
+
 			return <Marker //přidání markeru
 				position={position}
 				draggable={draggable}
@@ -165,17 +174,19 @@ function Button() {
 				icon={defaultIcon}>
 				<div className='popup'>
 					<Popup>
-						{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
+						{showMaker == 1 &&
+							<div>
+								<Anchorage onAnchorage={handleSetAnchorage} />
+							</div>}
 						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy} />}
 						{showMaker == 3 && <CityDock onCityDock={handleSetCityDock} />}
 						{showMaker == 4 && <Marina onMarina={handleSetMarina} />}
-
 						<button onClick={() => { setShowConfirm(true) }}>Přidat info</button>
 
 						{showConfirm == true &&
 							<div className='confirm'>
 								<h2>Are you sure?</h2>
-								<button onClick={addInfo}>Yes</button>
+								<button onClick={handleAddInfo}>Yes</button>
 								<button onClick={() => setShowConfirm(false)}>No</button>
 							</div>
 
@@ -189,9 +200,9 @@ function Button() {
 
 					</Popup>
 
-				</div>
+				</div >
 
-			</Marker>
+			</Marker >
 		}
 
 		return ( //nastavení tlačítka tak, aby bylo vidět

@@ -59,6 +59,7 @@ function Button() {
 			const [bottomId, setBottomId] = useState(null)
 			const [equipmentId, setEquipmentId] = useState()
 			const [showConfirm, setShowConfirm] = useState(false)
+			const [send, setSend] = useState(false)
 
 
 			const handleSetAnchorage = (name, selectedItemId, selectedItemIdWaterDeep, selectedItemIdWind, selectedItemIdBottom) => { // definovat callback funkci
@@ -148,14 +149,8 @@ function Button() {
 			}, [])
 
 			const handleAddInfo = () => {
-				console.log(position, "position")
-				console.log(getName, "name")
-				console.log(capacityId, "capacity")
-				console.log(waterDeepId, "water")
-				console.log(windId, "wind")
-				console.log(bottomId, "bottom")
-
 				setShowConfirm(false)
+				setSend(true)
 				addAnchorage({
 					position: position,
 					getName: getName,
@@ -166,7 +161,20 @@ function Button() {
 				});
 			};
 
-			return <Marker //přidání markeru
+			const resetButton = () => {
+				setShowCategory(false)
+				setShowMaker(null)
+				//buttonRef(null)
+			}
+
+			useEffect(() => {
+				if(send){
+					resetButton()
+					setSend(false)
+					}
+			}, [send])
+
+			return <Marker //přidání markeru \
 				position={position}
 				draggable={draggable}
 				eventHandlers={eventHandlers}
@@ -174,10 +182,7 @@ function Button() {
 				icon={defaultIcon}>
 				<div className='popup'>
 					<Popup>
-						{showMaker == 1 &&
-							<div>
-								<Anchorage onAnchorage={handleSetAnchorage} />
-							</div>}
+						{showMaker == 1 && <Anchorage onAnchorage={handleSetAnchorage} />}
 						{showMaker == 2 && <Buoy onBuoy={handleSetBuoy} />}
 						{showMaker == 3 && <CityDock onCityDock={handleSetCityDock} />}
 						{showMaker == 4 && <Marina onMarina={handleSetMarina} />}

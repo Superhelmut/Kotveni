@@ -11,14 +11,6 @@ const addAnchorage = (props) => {
 	const windId = props.windId
 	const bottomId = props.bottomId
 
-	console.log(latitude, "latitude")
-	console.log(longitude, "longitude")
-	console.log(getName, "name")
-	console.log(capacityId, "capacity")
-	console.log(waterDeepId, "water")
-	console.log(windId, "wind")
-	console.log(bottomId, "bottom")
-
 	Axios.post("http://localhost:3001/createAnchor", {
 		name: getName,
 		latitude: latitude,
